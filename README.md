@@ -15,9 +15,12 @@ consumer/client of the API as a JSON response.
 
 ## Project Setup
 Under the hood, SNAPI uses FastAPI to handle requests
-### Requirements
-- Python 3.7+
-- Postgres
+### Requirements (Windows 10 or Later)
+- [Visual Studio Code](https://code.visualstudio.com/download) OR [PyCharm Community Edition](https://www.jetbrains.com/pycharm/download/?section=windows)
+- [Python 10](https://www.python.org/downloads/release/python-31013/)
+- [Postgres 14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- [pgAdmin](https://www.pgadmin.org/download/pgadmin-4-windows/)
+- [Postman](https://www.postman.com/downloads/)
 
 ### FastAPI Setup
 ```bash 
