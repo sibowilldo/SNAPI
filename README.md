@@ -16,15 +16,25 @@ consumer/client of the API as a JSON response.
 # Project Setup
 Under the hood, SNAPI uses FastAPI to handle requests
 ## Requirements
-Python 3.7+
-Postgres
+- Python 3.7+
+- Postgres
 
 ## FastAPI Setup
-`pip install fastapi`
+```bash 
+pip install fastapi
+```
+
 You will also need Uvicorn as an ASGI server
-`pip install "uvicorn[standard]"`
+
+```bash
+pip install "uvicorn[standard]"
+```
+
 To run the project type
-`uvicorn main:app --reload`
+
+```bash
+uvicorn main:app --reload
+```
 
 # Roadmap
 The future of SNAPI will be trained to allow it to accept request in various formats such as voice prompts and text prompts (constrained to human food),
