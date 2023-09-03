@@ -33,6 +33,12 @@ You will also need Uvicorn as an ASGI server
 pip install "uvicorn[standard]"
 ```
 
+The Admin Section of SNAPI uses jinja2 Templates
+
+```bash
+pip install jinja2
+```
+
 To run the project type
 
 ```bash
