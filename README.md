@@ -1,5 +1,5 @@
-# About Smart Nutrition API (SNAPI)
-
+# Smart Nutrition API powered by AI
+## About
 The Smart Nutrition API (S.N.A.P.I) is a versatile RESTful API Powered by Artificial Intelligence that can been consumed
 and used by any application that supports JSON-RPC protocol such as Mobile Applications, JavaScript Application such as
 browser Extensions, for users who are conscious about the foods their consume, whether they are following a meal plan
@@ -13,11 +13,19 @@ contained in the image (e.g Banana). It then takes that data and compose a phras
 which the phrase is then posed to ChatGPT API, and receives a response that is further analyzed and returned to the
 consumer/client of the API as a JSON response.
 
-# Project Setup
+## Project Setup
 Under the hood, SNAPI uses FastAPI to handle requests
-## Requirements
-Python 3.7+
-Postgres
+### Requirements (Windows 10 or Later)
+- [Visual Studio Code](https://code.visualstudio.com/download) OR [PyCharm Community Edition](https://www.jetbrains.com/pycharm/download/?section=windows)
+- [Python 10](https://www.python.org/downloads/release/python-31013/)
+- [Postgres 14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- [pgAdmin](https://www.pgadmin.org/download/pgadmin-4-windows/)
+- [Postman](https://www.postman.com/downloads/)
+
+### FastAPI Setup
+```bash
+pip install fastapi
+```
 
 ## FastAPI Setup
 ```bash
@@ -36,7 +44,23 @@ To run the project type
 uvicorn main:app --reload
 ```
 
-# Roadmap
+```bash
+pip install "uvicorn[standard]"
+```
+
+The Admin Section of SNAPI uses jinja2 Templates
+
+```bash
+pip install jinja2
+```
+
+To run the project type
+
+```bash
+uvicorn main:app --reload
+```
+
+## Roadmap
 The future of SNAPI will be trained to allow it to accept request in various formats such as voice prompts and text prompts (constrained to human food),
 depending on the type of information given, SNAPI will then use Natural Language Processing (NLP) to process Voice and Text (e.g “How many
 calories are in this Banana”). It then takes that data and compose a phrase such as “Nutritional Value in a Banana”, to
