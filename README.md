@@ -22,11 +22,6 @@ Under the hood, SNAPI uses FastAPI to handle requests
 - [pgAdmin](https://www.pgadmin.org/download/pgadmin-4-windows/)
 - [Postman](https://www.postman.com/downloads/)
 
-### FastAPI Setup
-```bash
-pip install fastapi
-```
-
 ## FastAPI Setup
 ```bash
 pip install fastapi
