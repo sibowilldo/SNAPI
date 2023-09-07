@@ -42,7 +42,7 @@ pip install jinja2
 To run the project type
 
 ```bash
-uvicorn main:app --reload
+uvicorn app:app --reload
 ```
 
 ## Roadmap
