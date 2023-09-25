@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
+<head>
+    {% block head %}
+        <base href=""/>
+        <title>
+            {% block title %} {% endblock %} - SNAPI
+        </title>
+        <meta charset="utf-8"/>
+        <meta
+                name="description"
+                content=""
+        />
+        <meta
+                name="keywords"
+                content=""
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link rel="shortcut icon" href="{{ url_for('static', path='assets/media/logos/favicon.png') }}"/>
+
+        <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
+
+        <link
+                href="{{ url_for('static', path='assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}"
+                rel="stylesheet"
+                type="text/css"
+        />
+        <link
+                href="{{ url_for('static', path='assets/plugins/custom/datatables/datatables.bundle.css') }}"
+                rel="stylesheet"
+                type="text/css"
+        />
+
+        <link
+                href="{{ url_for('static', path='assets/plugins/global/plugins.bundle.css') }}"
+                rel="stylesheet"
+                type="text/css"
+        />
+        <link
+                href="{{ url_for('static', path='assets/css/style.bundle.css') }}"
+                rel="stylesheet"
+                type="text/css"
+        />
+        {% block styles %}{% endblock %}
+        <script>
+            if (window.top !== window.self) {
+                window.top.location.replace(window.self.location.href);
+            }
+        </script>
+
+    {% endblock %}
+</head>
+<body
+        id="kt_app_body"
+        data-kt-app-layout="light-sidebar"
+        data-kt-app-header-fixed="true"
+        data-kt-app-sidebar-enabled="true"
+        data-kt-app-sidebar-fixed="true"
+        data-kt-app-sidebar-hoverable="true"
+        data-kt-app-sidebar-push-header="true"
+        data-kt-app-sidebar-push-toolbar="true"
+        data-kt-app-sidebar-push-footer="true"
+        data-kt-app-footer-fixed="true"
+        class="app-default {% block body_css %}{% endblock %}"
+>
+{% block body %}{% endblock %}
+<script>
+    var hostUrl = "assets/";
+</script>
+<script src="{{ url_for('static', path='assets/plugins/global/plugins.bundle.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/scripts.bundle.js') }}"></script>
+
+<script src="{{ url_for('static', path='assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
+<script src="{{ url_for('static', path='assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/widgets.bundle.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/custom/widgets.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/custom/apps/chat/chat.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
+<script src="{{ url_for('static', path='assets/js/custom/utilities/modals/users-search.js') }}"></script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
