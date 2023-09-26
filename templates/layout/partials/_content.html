@@ -1,0 +1,14 @@
+{% extends 'layout/_default.html' %}
+<!--begin::Content-->
+{% block app_main %}
+    <div id="kt_app_content" class="app-content  flex-column-fluid ">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container  container-fluid ">
+            {#        Begin:Block Content #}
+            {% block content %}{% endblock %}
+            {#        End:Block Content #}
+        </div>
+        <!--end::Content container-->
+    </div>
+{% endblock %}
+<!--end::Content-->

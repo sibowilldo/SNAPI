@@ -17,33 +17,61 @@ consumer/client of the API as a JSON response.
 Under the hood, SNAPI uses FastAPI to handle requests
 ### Requirements (Windows 10 or Later)
 - [Visual Studio Code](https://code.visualstudio.com/download) OR [PyCharm Community Edition](https://www.jetbrains.com/pycharm/download/?section=windows)
-- [Python 10](https://www.python.org/downloads/release/python-31013/)
+- [Python 3.10](https://www.python.org/downloads/release/python-31013/)
 - [Postgres 14](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 - [pgAdmin](https://www.pgadmin.org/download/pgadmin-4-windows/)
 - [Postman](https://www.postman.com/downloads/)
 
-## FastAPI Setup
+## Python Virtual Environment
+### Windows ONLY Setup
+#### To avoid complications,  use Git Bash to execute the following commands on Windows
+install the virtual environment
 ```bash
-pip install fastapi
+python -m venv venv
 ```
 
-You will also need Uvicorn as an ASGI server
+activate your newly install virtual environment
 
 ```bash
-pip install "uvicorn[standard]"
+source venv/Scripts/activate
 ```
 
-The Admin Section of SNAPI uses jinja2 Templates
+install python packages in the requirements.txt file by using PIP
 
 ```bash
-pip install jinja2
+pip install -r requirements.txt
 ```
 
 To run the project type
 
 ```bash
-uvicorn app:app --reload
+uvicorn app.main:app --reload
 ```
+### Unix/Linux ONLY Setup
+install the virtual environment
+```bash
+python3 -m venv venv
+```
+
+activate your newly install virtual environment
+
+```bash
+source venv/bin/activate
+```
+
+install python packages in the requirements.txt file by using PIP
+
+```bash
+pip3 install -r requirements.txt
+```
+
+To run the project type
+
+```bash
+uvicorn app.main:app --reload
+```
+
+
 
 ## Roadmap
 The future of SNAPI will be trained to allow it to accept request in various formats such as voice prompts and text prompts (constrained to human food),
