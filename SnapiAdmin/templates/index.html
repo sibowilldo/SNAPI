@@ -1,0 +1,42 @@
+{% block content %}
+<div class="row">
+    <div class="Create">
+        <a href="createnew/" class="button">Create New</a>
+        <br><br>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Registration No</th>
+                    <th>Contact No</th>
+                    <th>Created By</th>
+                    <th>Updated By</th>
+                    
+                    <th width="200">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rs in users %}
+                <tr>
+                    <td>{{ rs.id }}</td>
+                    <td>{{ rs.user_id }}</td>
+                    <td>{{ rs.name }}</td>
+                    <td>{{ rs.registration }}</td>
+                    <td>{{ rs.contact }}</td>
+                    <td>{{ rs.created }}</td>
+                    <td>{{ rs.updated }}</td>
+                    <td>
+                        <a href="edit/{{ rs.id }}" class="btn btn-success">Edit</a> | <a href="delete/{{ rs.id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+
+  
