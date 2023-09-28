@@ -19,8 +19,3 @@ async def read_item(request: Request):
 @router.get("/changelog")
 async def changelog(token: Annotated[str, Depends(oauth2_scheme)]):
     return {"message": "Success", "data": {"v1_0_0": ""}}
-
-
-@router.get("/login", response_class=HTMLResponse)
-async def display_login_page(request: Request):
-    return templates.TemplateResponse("pages/auth/login.html", {"request": request})
