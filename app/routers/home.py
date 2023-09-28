@@ -16,6 +16,11 @@ async def read_item(request: Request):
     return templates.TemplateResponse("pages/dashboard.html", {"request": request})
 
 
+@router.get("/apikey", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("pages/apikey.html", {"request": request, "logged_in_user": "Sibongiseni"})
+
+
 @router.get("/changelog")
 async def changelog(token: Annotated[str, Depends(oauth2_scheme)]):
     return {"message": "Success", "data": {"v1_0_0": ""}}
