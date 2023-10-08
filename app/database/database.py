@@ -1,12 +1,16 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./snapidb.db"
-# SQLALCHEMY_DATABASE_URL = "postgresql://snapi-admin:Password01@posgresserver/snapidb"
+# switch between SQLite and Postgres
+is_using_sqlite = True
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-# engine = create_engine(SQLALCHEMY_DATABASE_URL)
+if is_using_sqlite:
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./app/database/snapidb.db"
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Password01@localhost:5432/snapidb"
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
