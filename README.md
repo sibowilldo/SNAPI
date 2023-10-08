@@ -72,6 +72,16 @@ uvicorn app.main:app --reload
 ```
 
 
+## Database Migrations
+*sample data is already provided inside app/database/snapidb.db, and the application by default connects to it*
+
+### Proceed with this section only have if you have a fresh install of the database
+#### Running the migrations
+This command will  create all the necessary database tables, BUT will NOT seed any data, 
+it's your responsibility to do that, just as it is to config a new database connection.
+```bash
+alembic upgrade head
+```
 
 ## Roadmap
 The future of SNAPI will be trained to allow it to accept request in various formats such as voice prompts and text prompts (constrained to human food),

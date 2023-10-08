@@ -49,6 +49,7 @@ class Ability(BaseModel):
     name: str
     status: Status
 
+
 class AccessToken(BaseModel):
     id: int
     token: str
