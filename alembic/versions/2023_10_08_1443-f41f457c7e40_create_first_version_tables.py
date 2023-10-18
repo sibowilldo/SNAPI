@@ -79,7 +79,7 @@ def upgrade() -> None:
     op.create_table("applications",
                     sa.Column('id', sa.Integer, primary_key=True),
                     sa.Column('user_id', sa.Integer, sa.ForeignKey("users.id")),
-                    sa.Column('status_id', sa.Integer, sa.ForeignKey("statuses.id")),
+                    sa.Column('company_id', sa.Integer, sa.ForeignKey("companies.id")),
 
                     sa.Column('name', sa.String(150)),
 
