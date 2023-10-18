@@ -10,13 +10,14 @@ from pydantic import BaseModel
 from app.schema import UserBase, User
 from .dependencies import get_api_version
 from .fake_db import fake_users_db
+from ..config import config_app
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # to get a string like this run:
 # openssl rand -hex 32
-SECRET_KEY = "f93f9794120844eab9013238b59816501a72cd4aa468c478b867432b466d8e2d"
-ALGORITHM = "HS256"
+SECRET_KEY = config_app.SECRET_KEY
+ALGORITHM = config_app.ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{get_api_version()}/token")
 

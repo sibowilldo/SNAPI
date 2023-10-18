@@ -13,7 +13,7 @@ ability_user = Table(
 ability_token = Table(
     "ability_token",
     Base.metadata,
-    Column("token_id", ForeignKey("tokens.id"), primary_key=True),
+    Column("token_id", ForeignKey("access_tokens.id"), primary_key=True),
     Column("ability_id", ForeignKey("abilities.id"), primary_key=True))
 
 
@@ -73,7 +73,7 @@ class Address(HasCommonAttrs, Base):
     postal_zip_code = Column(String)
     country = Column(String)
 
-    company = relationship('Company', backref="addresses")
+    company = relationship('Company', back_populates="addresses")
 
 
 class Ability(HasCommonAttrs, Base):
@@ -90,8 +90,8 @@ class Ability(HasCommonAttrs, Base):
 class Application(HasCommonAttrs, Base):
     __tablename__ = "applications"
 
-    user_id = Column(Integer, ForeignKey("users.id"))
     status_id = Column(Integer, ForeignKey("statuses.id"))
+    company_id = Column(Integer, ForeignKey("companies.id"))
 
     name = Column(String)
 
@@ -109,7 +109,7 @@ class AccessToken(HasCommonAttrs, Base):
     last_used_at = Column(DateTime, nullable=True)
 
     abilities = relationship("Ability", secondary=ability_token, back_populates="access_tokens")
-    application = relationship("Application", backref="access_tokens")
+    application = relationship("Application", back_populates="access_tokens")
     dataset_items = relationship("DatasetItem", back_populates="access_token")
 
 
@@ -121,7 +121,7 @@ class Dataset(HasCommonAttrs, Base):
     name = Column(String)
 
     status = relationship("Status", back_populates="datasets")
-    dataset_items = relationship("Dataset", back_populates="dataset")
+    dataset_items = relationship("DatasetItem", back_populates="dataset")
 
 
 class DatasetItem(HasCommonAttrs, Base):

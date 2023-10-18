@@ -1,13 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
-from .routers import home, auth
+from .config import config_app
+from .routers.auth import router as auth_router
+from .routers.apikeys import router as apikeys_router
+from .routers.applications import router as applications_router
+from .routers.companies import router as companies_router
+from .routers.home import router as home_router
 
-app = FastAPI()
-app.include_router(auth.router)
-app.include_router(home.router)
+app = FastAPI(title=config_app.APP_NAME, version=config_app.API_VERSION)
+app.include_router(apikeys_router)
+app.include_router(applications_router)
+app.include_router(companies_router)
+app.include_router(auth_router)
+app.include_router(home_router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-@app.get("/")
-async def home():
-    return {"message": "Silence is Golden!"}

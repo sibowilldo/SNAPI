@@ -1,0 +1,84 @@
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Create Key
+{% endblock %}
+{% block content %}
+    <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
+        <div class="col-md-9 col-lg-8 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
+            {% if message %}
+                <li>{{ message }}</li>
+            {% endif %}
+            <form method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Generate API Key</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-10">
+                            <select name="company_id" id="company" class="form-select" aria-label="Select Company">
+                                <option selected>Select Company</option>
+                                {% for company in companies %}
+                                    <option value="{{ company.id }}">{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-20">
+                            <select name="application_id" id="application_id" class="form-select"
+                                    aria-label="Select Application">
+                                <option selected>Select Application</option>
+                                {% for app in applications %}
+                                    <option value="{{ app.id }}">{{ app.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-10 fw-bold"> Token Abilities</div>
+                        <div class="mb-20">
+                            {% for ability in abilities %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="{{ ability.name }}" id="ability-{{ ability.id }}"/>
+                                    <label class="form-check-label" for="ability-{{ ability.id }}">
+                                        {{ ability.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-10 fw-bold"> API Key Lifespan</div>
+                        <div class="mb-20 d-flex flex-row gap-10 flex-wrap">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="key_lifespan" class="form-check-input" type="radio" value=""
+                                       id="six-months" checked/>
+                                <label class="form-check-label" for="six-months">
+                                    6 Months
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="key_lifespan" class="form-check-input" type="radio" value=""
+                                       id="nine-months"/>
+                                <label class="form-check-label" for="nine-months">
+                                    9 Months
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="key_lifespan" class="form-check-input" type="radio" value=""
+                                       id="one-year"/>
+                                <label class="form-check-label" for="one-year">
+                                    1 Year
+                                </label>
+                            </div>
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input name="key_lifespan" class="form-check-input" type="radio" value=""
+                                       id="lifetime"/>
+                                <label class="form-check-label" for="lifetime">
+                                    Lifetime
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-10">
+                            <button class="btn btn-primary">Generate Key</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
