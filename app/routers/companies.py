@@ -1,6 +1,10 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from app import repository as repo, schema
+from app.database.database import get_db
 
 router = APIRouter(prefix="/companies", tags=["Companies"], include_in_schema=False)
 
