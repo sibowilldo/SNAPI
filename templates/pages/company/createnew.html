@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="page-title">Company Details</h2>
+    <form action="/add" method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="text" id="name" name="name" placeholder="Company Name*" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="registration" name="registration_number" placeholder="Registration Number*" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="contact" name="main_contact_number" placeholder="Main Contact Number*" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="seccontact" name="secondary_contact_number" placeholder="Alt Contact Number" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary or-button">Create</button>
+    </form>
+</div>
+
+<script>
+    function generateCurrentDateTime() {
+        const currentDate = new Date().toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+        return currentDate;
+    }
+
+    function setGeneratedDateTime() {
+        const createdDiv = document.getElementById("created");
+        const updatedDiv = document.getElementById("updated");
+
+        const currentDateTime = generateCurrentDateTime();
+
+        createdDiv.textContent = currentDateTime;
+        updatedDiv.textContent = currentDateTime;
+    }
+    setGeneratedDateTime();
+</script>
+{% endblock content %}
+
+
+   
