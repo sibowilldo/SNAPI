@@ -1,32 +1,35 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional, Any, List
 
 from pydantic import BaseModel, Json
 
 
-class UserBase(BaseModel):
-    name: str
-    is_active: bool
-    username: str
-    email: str
-    email_verified_at: Optional[datetime] = None
-
-
-class UserCreate(UserBase):
-    pass
-
-
-class User(UserBase):
-    id: int
-    hashed_password: str
-
-
 class StatusBase(BaseModel):
-    pass
+    name: str
+
+    class Config:
+        orm_mode = True
 
 
 class StatusCreate(StatusBase):
     pass
+
+
+class UserBase(BaseModel):
+    name: str
+    username: str
+    email: str
+
+
+class UserCreate(UserBase):
+    status_id: int
+    password: str
+
+
+class User(UserBase):
+    id: int
+    email_verified_at: Optional[datetime] = None
+    remember_token: str
 
 
 class Status(StatusBase):
@@ -37,31 +40,51 @@ class Status(StatusBase):
         from_attributes = True
 
 
-class Application(BaseModel):
-    id: int
-    name: str
-    user: User
-    status: Status
-
-
 class Ability(BaseModel):
     id: int
     name: str
     status: Status
 
-class AccessToken(BaseModel):
-    id: int
-    token: str
-    expires_at: datetime
 
-
-class Company(BaseModel):
-    id: int
+class CompanyBase(BaseModel):
     name: str
     registration_number: str
     main_contact_number: str
     secondary_contact_number: Optional[str] = None
-    owner: User
+
+    class Config:
+        orm_mode = True
+
+
+class CompanyCreate(CompanyBase):
+    user_id: int
+
+
+class ApplicationBase(BaseModel):
+    name: str
+
+
+class ApplicationCreate(ApplicationBase):
+    company_id: int
+    status_id: int
+
+
+class Application(ApplicationBase):
+    id: int
+    company: CompanyBase
+    status: StatusBase
+
+    class Config:
+        orm_mode = True
+
+
+class Company(CompanyBase):
+    id: int
+    user: User
+    applications: list[Application]
+
+    class Config:
+        orm_mode = True
 
 
 class Address(BaseModel):
@@ -74,6 +97,26 @@ class Address(BaseModel):
     postal_zip_code: str
     country: str
     status: Status
+
+
+class AccessTokenBase(BaseModel):
+    token: str
+    expires_at: Optional[datetime] = None
+    last_used_at: Optional[datetime] = None
+
+
+class AccessToken(AccessTokenBase):
+    id: int
+    application: Application
+
+    class Config:
+        orm_mode = True
+
+
+class AccessTokenCreate(AccessTokenBase):
+    token: str
+    abilities: List[int]
+    application_id: int
 
 
 class Dataset(BaseModel):

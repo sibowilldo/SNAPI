@@ -32,7 +32,7 @@
             id="kt_app_header_menu"
             data-kt-menu="true"
     >
-        <!--begin:Menu item-->
+
         <div class="menu-item">
             <div class="menu-link active">
                 <a class="menu-link" href="/" target="_blank"><span class="menu-title">Dashboard</span></a>
@@ -40,34 +40,36 @@
         </div>
         <div class="menu-item">
             <div class="menu-link">
-                <a class="menu-link" href="/companies" target="_blank"><span class="menu-title">Companies</span></a>
+                <a class="menu-link" href="{{ url_for('companies.index') }}" target="_blank"><span class="menu-title">Companies</span></a>
             </div>
         </div>
         <div class="menu-item">
             <div class="menu-link">
-                <a class="menu-link" href="/applications"
+                <a class="menu-link" href="{{ url_for('applications.index') }}"
                    target="_blank"><span class="menu-title">Application</span></a>
             </div>
         </div>
 
         <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start"
              class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-            <!--begin:Menu link--><span class="menu-link"><span class="menu-title">Help</span><span
-                class="menu-arrow d-lg-none"></span></span><!--end:Menu link--><!--begin:Menu sub-->
+            <span class="menu-link"><span class="menu-title">Help</span><span
+                    class="menu-arrow d-lg-none"></span></span>
             <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
-                <!--begin:Menu item-->
-                <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                                                href="/docs"
-                                                                target="_blank"
-                                                                data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                                data-bs-dismiss="click" data-bs-placement="right"><span
+
+                <div class="menu-item"><a class="menu-link"
+                                          href="/docs"
+                                          target="_blank"
+                                          data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                          data-bs-dismiss="click" data-bs-placement="right"><span
                         class="menu-icon"><i class="ki-outline ki-abstract-22 fs-2"></i></span><span class="menu-title">Documentation</span></a>
-                    <!--end:Menu link--></div><!--end:Menu item--><!--begin:Menu item-->
-                <div class="menu-item"><!--begin:Menu link--><a class="menu-link"
-                                                                href="/changelog"
-                                                                target="_blank"><span class="menu-icon"><i
+                </div>
+                <div class="menu-item"><a class="menu-link"
+                                          href="/changelog"
+                                          target="_blank"><span class="menu-icon"><i
                         class="ki-outline ki-code fs-2"></i></span><span class="menu-title">Changelog v1.0.0</span></a>
-                    <!--end:Menu link--></div><!--end:Menu item--></div><!--end:Menu sub--></div><!--end:Menu item-->
+                </div>
+            </div>
+        </div>
     </div>
     <!--end::Menu-->
 </div>
