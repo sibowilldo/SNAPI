@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="page-title">Edit Company Information</h2>
+    <form action="/update/{{ company_id }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="PUT">
+
+        <div class="mb-3">
+            <input type="text" id="name" name="name" placeholder="Company Name*" class="form-control" value="{{ user.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="registration" name="registration" placeholder="Registration Number*" class="form-control" value="{{ user.registration }}" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="contact" name="contact" placeholder="Main Contact Number*" class="form-control" value="{{ user.contact }}" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" id="contact" name="contact" placeholder="Alt Contact Number" class="form-control" value="{{ user.contact }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary or-button">Update</button>
+    </form>
+</div>
+{% endblock content %}
