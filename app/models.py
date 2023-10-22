@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import Column, ForeignKey, Integer, String, Table, DateTime
 from sqlalchemy.orm import relationship
 
@@ -106,6 +108,7 @@ class AccessToken(HasCommonAttrs, Base):
     application_id = Column(Integer, ForeignKey("applications.id"))
 
     token = Column(String)
+    expires_at = Column(DateTime, nullable=True)
     last_used_at = Column(DateTime, nullable=True)
 
     abilities = relationship("Ability", secondary=ability_token, back_populates="access_tokens")

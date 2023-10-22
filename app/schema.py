@@ -60,14 +60,6 @@ class CompanyCreate(CompanyBase):
     user_id: int
 
 
-class Company(CompanyBase):
-    id: int
-    user: User
-
-    class Config:
-        orm_mode = True
-
-
 class ApplicationBase(BaseModel):
     name: str
 
@@ -81,6 +73,15 @@ class Application(ApplicationBase):
     id: int
     company: CompanyBase
     status: StatusBase
+
+    class Config:
+        orm_mode = True
+
+
+class Company(CompanyBase):
+    id: int
+    user: User
+    applications: list[Application]
 
     class Config:
         orm_mode = True
@@ -100,12 +101,12 @@ class Address(BaseModel):
 
 class AccessTokenBase(BaseModel):
     token: str
-    last_used_at: datetime
+    expires_at: Optional[datetime] = None
+    last_used_at: Optional[datetime] = None
 
 
 class AccessToken(AccessTokenBase):
     id: int
-    status: Status
     application: Application
 
     class Config:
@@ -115,7 +116,6 @@ class AccessToken(AccessTokenBase):
 class AccessTokenCreate(AccessTokenBase):
     token: str
     abilities: List[int]
-    status_id: int
     application_id: int
 
 

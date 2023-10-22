@@ -36,7 +36,8 @@
                         <div class="mb-9 text-dark">
                             <label for="token_clipboard">{{ token.message }}</label>
                             <textarea id="token_clipboard"
-                                      class="fw-bold fs-4 mt-5 form-control text-center form-control-transparent h-sm-175px h-md-auto resize-none" rows="3">{{ token.token }}</textarea>
+                                      class="fw-bold fs-4 mt-5 form-control text-center form-control-transparent h-sm-175px h-md-auto resize-none"
+                                      rows="3">{{ token.token }}</textarea>
                         </div>
                         <!--end::Content-->
 
@@ -75,38 +76,87 @@
 
                         <!--begin::Body-->
                         <div class="card-body pt-0">
-                            <!--begin::Item-->
-                            <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-7">
-                                <i class="ki-duotone ki-key-square text-warning fs-1 me-5">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
-                                <!--begin::Title-->
-                                <div class="flex-grow-1 me-2">
-                                    <a href="#" class="fw-bold text-gray-800 text-hover-primary fs-6">Application
-                                        Name</a>
-                                    <div class="d-flex gap-5">
-                                        <span class="text-muted fw-semibold d-block">Created at</span>
-                                        <span class="text-muted fw-semibold d-block">Expires at</span>
-                                        <span class="text-muted fw-semibold d-block">Last Used at</span>
-                                    </div>
-
-                                </div>
-                                <!--end::Title-->
-
-                                <!--begin::Lable-->
-                                <button class="btn btn-outline-danger btn-sm">
-                                    <i class="ki-duotone text-dark ki-trash fs-2">
+                            {% for access_token in access_tokens %}
+                                <!--begin::Item-->
+                                <div class="d-flex align-items-center bg-light-warning rounded p-5 mb-7">
+                                    <i class="ki-duotone ki-key-square text-warning fs-1 me-5">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
-                                        <span class="path3"></span>
-                                        <span class="path4"></span>
-                                        <span class="path5"></span>
                                     </i>
-                                </button>
-                                <!--end::Lable-->
-                            </div>
-                            <!--end::Item-->
+                                    <!--begin::Title-->
+                                    <div class="flex-grow-1 me-2 gap-5">
+                                        <div class="d-flex gap-5 ">
+                                            <p class="text-black-50 fw-semibold d-block">
+                                                <a href="#"
+                                                   class="fw-bold text-gray-800 text-hover-primary fs-6">{{ access_token.id }}: {{ access_token.application.name }}</a>
+                                            </p>
+                                            <ul class="d-flex flex-row gap-10">
+                                                {% for ability in  access_token.abilities %}
+                                                    <li class="text-muted">{{ ability.name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex gap-5">
+                                            <span class="text-black-50 fw-semibold d-block"><strong>Created At:</strong> {{ access_token.created_at.strftime('%B, %d %Y') }}</span>
+                                            <span class="text-black-50 fw-semibold d-block"><strong>Expires At:</strong> {{ access_token.expires_at.strftime('%B, %d %Y') }}</span>
+                                            {% if access_token.updated_at %}
+                                                <span class="text-black-50 fw-semibold d-block"><strong>Last Updated At:</strong> {{ access_token.updated_at.strftime('%B, %d %Y') }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                    </div>
+                                    <!--end::Title-->
+
+                                    <!--begin::Lable-->
+                                    <button class="btn btn-outline-danger btn-sm delete-token"
+                                            data-id="{{ access_token.id }}">
+                                        <i class="ki-duotone text-dark ki-trash fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </button>
+                                    <!--end::Lable-->
+                                </div>
+                                <!--end::Item-->
+                            {% endfor %}
+                            {% if not token_count %}
+                                <!--begin::Alert-->
+                                <div class="alert alert-dismissible bg-light-primary d-flex flex-center flex-column py-10 px-10 px-lg-20 mt-5">
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-information-5 fs-5tx text-primary mb-5"><span
+                                            class="path1"></span><span class="path2"></span><span
+                                            class="path3"></span></i>
+                                    <!--end::Icon-->
+
+                                    <!--begin::Wrapper-->
+                                    <div class="text-center">
+                                        <!--begin::Title-->
+                                        <h1 class="fw-bold mb-5">Nothing here!</h1>
+                                        <!--end::Title-->
+
+                                        <!--begin::Separator-->
+                                        <div class="separator separator-dashed border-primary opacity-25 mb-5"></div>
+                                        <!--end::Separator-->
+
+                                        <!--begin::Content-->
+                                        <div class="mb-9 text-dark">
+                                            We could not find any Access Tokens for you. Have you created one?
+                                        </div>
+                                        <!--end::Content-->
+
+                                        <!--begin::Buttons-->
+                                        <div class="d-flex flex-center flex-wrap">
+                                            <a href="{{ url_for('apikeys.create') }}" class="btn btn-primary m-2">Create Token</a>
+                                        </div>
+                                        <!--end::Buttons-->
+                                    </div>
+                                    <!--end::Wrapper-->
+                                </div>
+                                <!--end::Alert-->
+                            {% endif %}
                         </div>
                         <!--end::Body-->
                     </div>
@@ -119,79 +169,135 @@
 
 {% block scripts %}
     <script>
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toastr-top-center",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
 
-        // Select elements
-        const target = document.getElementById('token_clipboard');
-        const button = document.getElementById('token_clipboard_button');
+        $(document).ready(() => {
 
-        clipboard = new ClipboardJS(button, {
-            target: target,
-            text: function () {
-                return target.innerHTML;
-            }
-        });
+            {% if token %}
+                handleCopyTokenToClipboard();
+            {% endif %}
 
-        // Success action handler
-        clipboard.on('success', function (e) {
-            var checkIcon = button.querySelector('.ki-check');
-            var copyIcon = button.querySelector('.ki-copy');
 
-            // Exit check icon when already showing
-            if (checkIcon) {
-                return;
-            }
+            handleDeleteAccessToken();
+        })
 
-            toastr.success("Copied to Clipboard!");
+        function handleCopyTokenToClipboard() {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
 
-            // Create check icon
-            checkIcon = document.createElement('i');
-            checkIcon.classList.add('ki-duotone');
-            checkIcon.classList.add('ki-check');
-            checkIcon.classList.add('fs-2');
+            // Select elements
+            const target = document.getElementById('token_clipboard');
+            const button = document.getElementById('token_clipboard_button');
 
-            // Append check icon
-            button.appendChild(checkIcon);
+            clipboard = new ClipboardJS(button, {
+                target: target,
+                text: function () {
+                    return target.innerHTML;
+                }
+            });
 
-            // Highlight target
-            const classes = ['text-success', 'fw-boldest'];
-            target.classList.add(...classes);
+            // Success action handler
+            clipboard.on('success', function (e) {
+                var checkIcon = button.querySelector('.ki-check');
+                var copyIcon = button.querySelector('.ki-copy');
 
-            // Highlight button
-            button.classList.add('btn-success');
+                // Exit check icon when already showing
+                if (checkIcon) {
+                    return;
+                }
 
-            // Hide copy icon
-            copyIcon.classList.add('d-none');
+                toastr.success("Copied to Clipboard!");
 
-            // Revert button label after 3 seconds
-            setTimeout(function () {
+                // Create check icon
+                checkIcon = document.createElement('i');
+                checkIcon.classList.add('ki-duotone');
+                checkIcon.classList.add('ki-check');
+                checkIcon.classList.add('fs-2');
 
-                // Remove check icon
-                copyIcon.classList.remove('d-none');
+                // Append check icon
+                button.appendChild(checkIcon);
 
-                // Revert icon
-                button.removeChild(checkIcon);
+                // Highlight target
+                const classes = ['text-success', 'fw-boldest'];
+                target.classList.add(...classes);
 
-                // Remove target highlight
-                target.classList.remove(...classes);
-            }, 5000)
-        });
+                // Highlight button
+                button.classList.add('btn-success');
+
+                // Hide copy icon
+                copyIcon.classList.add('d-none');
+
+                // Revert button label after 3 seconds
+                setTimeout(function () {
+
+                    // Remove check icon
+                    copyIcon.classList.remove('d-none');
+
+                    // Revert icon
+                    button.removeChild(checkIcon);
+
+                    // Remove target highlight
+                    target.classList.remove(...classes);
+                }, 5000)
+            });
+        }
+
+        function handleDeleteAccessToken() {
+            let deleteTokenBtn = $('.delete-token')
+
+            deleteTokenBtn.on('click', function (e) {
+                let itemId = $(this).data('id')
+                let url = "{{ url_for('apikeys.delete', access_token_id=':item_id:') }}"
+                Swal.fire({
+                    title: 'Confirm Action',
+                    text: "Are you sure, you wan to delete this token?",
+                    icon: "info",
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, I'm sure!",
+                    customClass: {
+                        confirmButton: "btn btn-light-primary",
+                        cancelButton: "btn btn-danger"
+                    }
+                }).then((result) => {
+                    window.axios
+                        .delete(url.replace(':item_id:', itemId))
+                        .then((response) => {
+                            console.log(response)
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Access Token has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    window.location.reload()
+                                })
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'Failed to Delete!',
+                                'Access Token could not be deleted.',
+                                'error'
+                            )
+                        })
+                })
+            })
+        }
 
     </script>
 {% endblock %}

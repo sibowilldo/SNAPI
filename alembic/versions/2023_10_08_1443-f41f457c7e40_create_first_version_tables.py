@@ -92,6 +92,7 @@ def upgrade() -> None:
                     sa.Column('application_id', sa.Integer, sa.ForeignKey("applications.id")),
 
                     sa.Column('token', sa.String),
+                    sa.Column('expires_at', sa.DateTime, nullable=True),
                     sa.Column('last_used_at', sa.DateTime, nullable=True),
 
                     sa.Column('created_at', sa.DateTime, server_default=str(datetime.now())),
