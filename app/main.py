@@ -7,6 +7,8 @@ from .routers.apikeys import router as apikeys_router
 from .routers.applications import router as applications_router
 from .routers.companies import router as companies_router
 from .routers.home import router as home_router
+from .routers.json import router as json_router
+
 
 app = FastAPI(title=config_app.APP_NAME, version=config_app.API_VERSION)
 app.include_router(apikeys_router)
