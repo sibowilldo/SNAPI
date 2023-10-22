@@ -1,63 +1,71 @@
+import json
+
 from sqlalchemy import Column, ForeignKey, Integer, String, Table, DateTime
 from sqlalchemy.orm import relationship
 
 from app.database.database import Base
+from app.mixins import HasCommonAttrs
 
 ability_user = Table(
     "ability_user",
     Base.metadata,
-    Column("user_id", ForeignKey("users.id")), Column("ability_id", ForeignKey("abilities.id")))
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    Column("ability_id", ForeignKey("abilities.id"), primary_key=True))
 
 ability_token = Table(
     "ability_token",
     Base.metadata,
-    Column("token_id", ForeignKey("tokens.id")), Column("ability_id", ForeignKey("abilities.id")))
+    Column("token_id", ForeignKey("access_tokens.id"), primary_key=True),
+    Column("ability_id", ForeignKey("abilities.id"), primary_key=True))
 
 
-class Status(Base):
+class Status(HasCommonAttrs, Base):
     __tablename__ = "statuses"
 
-    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String, nullable=True)
 
+    abilities = relationship("Ability", back_populates="status")
     applications = relationship("Application", back_populates="status")
+    dataset_items = relationship("DatasetItem", back_populates="status")
+    datasets = relationship("Dataset", back_populates="status")
     users = relationship("User", back_populates="status")
-    abilities = relationship("Status", back_populates="status")
 
 
-class User(Base):
+class User(HasCommonAttrs, Base):
     __tablename__ = "users"
 
-    id = Column(Integer, ForeignKey("addresses.id"), primary_key=True, index=True)
-    status_id = Column(Integer, ForeignKey("status.id"))
+    status_id = Column(Integer, ForeignKey("statuses.id"))
     name = Column(String)
     email = Column(String)
     remember_token = Column(String)
-    email_verified_at = Column(DateTime)
+    hashed_password = Column(String, nullable=False)
+    email_verified_at = Column(DateTime, nullable=True)
 
-    abilities = relationship(secondary=ability_user, back_populates="users")
-    applications = relationship("Company", back_populates="user")
+    abilities = relationship("Ability", secondary=ability_user, back_populates="users")
     companies = relationship("Company", back_populates="user")
     status = relationship("Status", back_populates="users")
 
-    __mapper_args__ = {"polymorphic_identity": "users"}
 
-
-class Company(Base):
+class Company(HasCommonAttrs, Base):
     __tablename__ = "companies"
 
-    id = Column(Integer, ForeignKey("addresses.id"), primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    name = Column(String)
+    registration_number = Column(String)
+    main_contact_number = Column(String)
+    secondary_contact_number = Column(String, nullable=True)
 
     user = relationship("User", back_populates="companies")
+    addresses = relationship("Address", back_populates="company")
+    applications = relationship("Application", back_populates="company")
 
-    __mapper_args__ = {"polymorphic_identity": "companies"}
 
-
-class Address(Base):
+class Address(HasCommonAttrs, Base):
     __tablename__ = "addresses"
 
-    id = Column(Integer, primary_key=True, index=True)
-    addressable_type = Column(String)
+    company_id = Column(Integer, ForeignKey('companies.id'))
 
     street_name = Column(String)
     street_number = Column(String)
@@ -67,62 +75,69 @@ class Address(Base):
     postal_zip_code = Column(String)
     country = Column(String)
 
-    __mapper_args__ = {"polymorphic_identity": "addresses", "polymorphic_on": addressable_type}
+    company = relationship('Company', back_populates="addresses")
 
 
-class Ability(Base):
+class Ability(HasCommonAttrs, Base):
     __tablename__ = "abilities"
 
-    id = Column(Integer, primary_key=True)
     name = Column(String)
     status_id = Column(Integer, ForeignKey("statuses.id"))
 
     status = relationship("Status", back_populates="abilities")
-    users = relationship(secondary=ability_user, back_populates="abilities")
-    access_tokens = relationship(secondary=ability_token, back_populates="abilities")
+    users = relationship("User", secondary=ability_user, back_populates="abilities")
+    access_tokens = relationship("AccessToken", secondary=ability_token, back_populates="abilities")
 
 
-class Application(Base):
+class Application(HasCommonAttrs, Base):
     __tablename__ = "applications"
 
-    id = Column(Integer, primary_key=True)
-
-    user_id = Column(Integer, ForeignKey("users.id"))
     status_id = Column(Integer, ForeignKey("statuses.id"))
+    company_id = Column(Integer, ForeignKey("companies.id"))
+
+    name = Column(String)
 
     company = relationship("Company", back_populates="applications")
     status = relationship("Status", back_populates="applications")
+    access_tokens = relationship("AccessToken", back_populates="application")
 
-    __mapper_args__ = {"polymorphic_identity": "applications"}
 
-
-class AccessToken(Base):
+class AccessToken(HasCommonAttrs, Base):
     __tablename__ = "access_tokens"
 
-    id = Column(Integer, primary_key=True)
-    tokenable_type = Column(String)
+    application_id = Column(Integer, ForeignKey("applications.id"))
 
-    access_token = Column(String)
-    token_type = Column(String)
+    token = Column(String)
+    expires_at = Column(DateTime, nullable=True)
+    last_used_at = Column(DateTime, nullable=True)
 
-    abilities = relationship(secondary=ability_token, back_populates="access_tokens")
+    abilities = relationship("Ability", secondary=ability_token, back_populates="access_tokens")
+    application = relationship("Application", back_populates="access_tokens")
+    dataset_items = relationship("DatasetItem", back_populates="access_token")
 
-    __mapper_args__ = {"polymorphic_identity": "access_tokens", "polymorphic_type": tokenable_type}
 
-
-class DatasetItem(Base):
+class Dataset(HasCommonAttrs, Base):
     __tablename__ = "datasets"
 
-    id = Column(Integer, primary_key=True)
+    status_id = Column(Integer, ForeignKey("statuses.id"))
+
+    name = Column(String)
+
+    status = relationship("Status", back_populates="datasets")
+    dataset_items = relationship("DatasetItem", back_populates="dataset")
+
+
+class DatasetItem(HasCommonAttrs, Base):
+    __tablename__ = "dataset_items"
+
+    dataset_id = Column(Integer, ForeignKey("datasets.id"))
+    access_token_id = Column(Integer, ForeignKey("access_tokens.id"))
+    status_id = Column(Integer, ForeignKey("statuses.id"))
+
     type = Column(String)
     file_path = Column(String)
-    metadata = Column(String)
+    file_metadata = Column(String)
 
-    __mapper_args__ = {"polymorphic_identity": "dataset_items"}
-
-
-class Dataset(Base):
-    __tablename__ = "datasets"
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    status = relationship("Status", back_populates="dataset_items")
+    access_token = relationship("AccessToken", back_populates="dataset_items")
+    dataset = relationship("Dataset", back_populates="dataset_items")

@@ -1,4 +1,6 @@
+
 from __future__ import annotations
+
 
 api_version = "/api/v1"
 
