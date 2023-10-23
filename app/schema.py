@@ -69,6 +69,12 @@ class ApplicationCreate(ApplicationBase):
     status_id: int
 
 
+class ApplicationUpdate(ApplicationBase):
+    application_id: int
+    company_id: int
+    status_id: int
+
+
 class Application(ApplicationBase):
     id: int
     company: CompanyBase

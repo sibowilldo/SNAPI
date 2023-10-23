@@ -1,9 +1,16 @@
+import datetime
+from typing import List
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from . import models, schema
-from .schema import Application
+from .schema import Application, Status
 from .utils.auth import get_hashed_password
+
+
+def get_statuses(db: Session) -> List[Status]:
+    return db.query(models.Status).all()
 
 
 def get_user(db: Session, user_id: int):
@@ -57,6 +64,11 @@ def get_applications_by_company_id(db: Session, company_id: int, skip: int = 0, 
         limit).all()
 
 
+def get_applications_by_company_ids(db: Session, ids: List[int], skip: int = 0, limit: int = -1) -> List[Application]:
+    return db.query(models.Application).filter(models.Application.company_id.in_(ids)).offset(skip).limit(
+        limit).all()
+
+
 def get_companies(db: Session, user_id: int, skip: int = 0, limit: int = -1):
     return db.scalars(select(models.Company).filter(models.Company.user_id == user_id).offset(skip).limit(limit))
 
@@ -66,7 +78,8 @@ def get_user_access_tokens(db: Session, user_id: int):
     application_ids = db.scalars(
         select(models.Application.id).filter(models.Application.company_id.in_(company_ids))).all()
     access_tokens = db.scalars(
-        select(models.AccessToken).filter(models.AccessToken.application_id.in_(application_ids))).all()
+        select(models.AccessToken).filter(models.AccessToken.application_id.in_(application_ids)).order_by(
+            models.AccessToken.created_at.desc())).all()
     return access_tokens
 
 
@@ -92,5 +105,25 @@ def delete_token(db: Session, access_token_id: int):
     db_access_token = db.query(models.AccessToken).filter(models.AccessToken.id == access_token_id).delete()
     db.commit()
 
-    print(db_access_token)
     return db_access_token
+
+
+def delete_application(db: Session, application_id: int):
+    db_application = db.query(models.Application).filter(models.Application.id == application_id).delete()
+    db.commit()
+
+    return db_application
+
+
+def update_application(db: Session, application: schema.ApplicationUpdate):
+    db_application = db.query(models.Application).filter(models.Application.id == application.application_id).first()
+
+    db_application.name = application.name
+    db_application.company_id = application.company_id
+    db_application.status_id = application.status_id
+    db_application.updated_at = datetime.datetime.now()
+
+    db.commit()
+    db.refresh(db_application)
+    return db_application
+
