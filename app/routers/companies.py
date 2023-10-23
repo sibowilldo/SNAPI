@@ -10,21 +10,16 @@ router = APIRouter(prefix="/companies", tags=["Companies"], include_in_schema=Fa
 
 templates = Jinja2Templates(directory="templates")
 
-
-@router.get("/", response_class=HTMLResponse, name="companies.index")
-async def create(request: Request):
-    companies = [{"id": 1, "name": "SNAPI Inc.", "registration_number": "234-5673-GH", }]
-    applications = [{"id": 1, "name": "MultiPlatform Flutter", "created_at": "2023-06-11", }]
-
-    return templates.TemplateResponse("pages/companies/index.html",
-                                      {"request": request, "applications": applications, "companies": companies, })
-
+@router.get("/")
+async def home(request: Request, db: Session = Depends(get_db)):
+    companies = db.query(Company).order_by(Company.id.asc()).all()
+    return templates.TemplateResponse("index.html", {"request": request, "companies": companies})
 
 @router.post("/add")
 async def add(
     request: Request,
     name: str = Form(...),
-    registration_number: str = Form(...),
+    registration_number: int = Form(...),
     main_contact_number: int = Form(...),
     secondary_contact_number: int = Form(...),
     user_id: int = Form(...),
@@ -48,7 +43,7 @@ async def add(
         raise HTTPException(status_code=422, detail=str(e))
 
 @router.get("/createnew")
-async def createnew(request: Request, user_id: int = 1, db: Session = Depends(get_db)):
+async def createnew(request: Request, user_id: int = Cookie(None), db: Session = Depends(get_db)):
     if user_id is None:
         raise HTTPException(status_code=401, detail="User not authenticated")
     return templates.TemplateResponse("createnew.html", {"request": request, "user_id": user_id})
@@ -63,7 +58,8 @@ async def update(
     request: Request,
     company_id: int,
     name: str = Form(...),
-    registration_number: str = Form(...),
+    registration_number: int = Form(...),
+
     main_contact_number: int = Form(...),
     secondary_contact_number: int = Form(...),
     db: Session = Depends(get_db)
@@ -90,6 +86,3 @@ async def delete(
     db.commit()
     return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
-if __name__ == "__app__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="container">
-
     <h2 class="page-title">Edit Company Information</h2>
     <form action="/update/{{ company_id }}" method="post">
         {% csrf_token %}
@@ -25,7 +24,6 @@
         </div>
 
         <button type="submit" class="btn btn-primary or-button">Update</button>
-
     </form>
 </div>
 {% endblock content %}
