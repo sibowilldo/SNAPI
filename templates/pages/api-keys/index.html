@@ -149,7 +149,8 @@
 
                                         <!--begin::Buttons-->
                                         <div class="d-flex flex-center flex-wrap">
-                                            <a href="{{ url_for('apikeys.create') }}" class="btn btn-primary m-2">Create Token</a>
+                                            <a href="{{ url_for('apikeys.create') }}" class="btn btn-primary m-2">Create
+                                                Token</a>
                                         </div>
                                         <!--end::Buttons-->
                                     </div>
@@ -274,27 +275,26 @@
                         cancelButton: "btn btn-danger"
                     }
                 }).then((result) => {
-                    window.axios
-                        .delete(url.replace(':item_id:', itemId))
-                        .then((response) => {
-                            console.log(response)
-                            if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+                        window.axios
+                            .delete(url.replace(':item_id:', itemId))
+                            .then((response) => {
                                 Swal.fire(
                                     'Deleted!',
                                     'Access Token has been deleted.',
                                     'success'
                                 ).then(() => {
-                                    window.location.reload()
+                                    window.location.replace("{{ url_for('apikeys.index') }}")
                                 })
-                            }
-                        })
-                        .catch(error => {
-                            Swal.fire(
-                                'Failed to Delete!',
-                                'Access Token could not be deleted.',
-                                'error'
-                            )
-                        })
+                            })
+                            .catch(error => {
+                                Swal.fire(
+                                    'Failed to Delete!',
+                                    'Access Token could not be deleted.',
+                                    'error'
+                                )
+                            })
+                    }
                 })
             })
         }
