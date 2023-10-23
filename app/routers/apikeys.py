@@ -5,8 +5,6 @@ from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from starlette import status
-from starlette.responses import RedirectResponse
 
 from app import repository as repo
 from app.database.database import get_db
@@ -43,7 +41,6 @@ async def create(request: Request, db: Session = Depends(get_db)):
 
 @router.post("/create", response_class=HTMLResponse, name="apikeys.store", include_in_schema=False)
 async def store_apikey(request: Request,
-                       company_id: Annotated[int, Form()],
                        application_id: Annotated[int, Form()],
                        abilities: Annotated[List[int], Form()],
                        lifespan: Annotated[int, Form()],
@@ -61,15 +58,13 @@ async def store_apikey(request: Request,
 
     token_message = {"token": token,
                      "message": """Please save this secret key somewhere safe and accessible. 
-                     For security reasons, you won't be able to view it again through your OpenAI account. 
-                     If you lose this secret key, you'll need to generate a new one."""}
+                     For security reasons, you won't be able to view it again through your account. 
+                     If you lose this secret key, you'll need to create a new one."""}
 
-    return RedirectResponse(url=router.url_path_for('apikeys.index'), status_code=status.HTTP_303_SEE_OTHER)
-
-    # return templates.TemplateResponse("pages/api-keys/index.html", {
-    #     "request": request,
-    #     "message": "Success",
-    #     "token": token_message,
-    #     "access_tokens": access_tokens,
-    #     "token_count": len(access_tokens)
-    # })
+    return templates.TemplateResponse("pages/api-keys/index.html", {
+        "request": request,
+        "message": "Success",
+        "token": token_message,
+        "access_tokens": access_tokens,
+        "token_count": len(access_tokens)
+    })

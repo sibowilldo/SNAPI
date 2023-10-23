@@ -68,21 +68,6 @@ async def store_apikey(request: Request, db: Session = Depends(get_db), image_li
             'detail': {
                 'msg': 'Failed to analyze image. Please try a different angle or or taking it under lit conditions.'}
         }
-    # except Exception as ex:
-    #     response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    #     return {
-    #         'detail': {
-    #             'msg': 'Fatal',
-    #             'exception': ex
-    #         }
-    #     }
-
-
-@router.get("/predict", name="api.predict")
-async def store_apikey(request: Request, db: Session = Depends(get_db)):
-    access_tokens = get_user_access_tokens(db=db, user_id=1)
-
-    return ''
 
 
 def generate_description(input_):
