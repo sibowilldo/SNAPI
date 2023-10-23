@@ -25,7 +25,6 @@ def upgrade() -> None:
 
                     )
     op.create_table('ability_token',
-                    sa.Column('id', sa.INTEGER(), nullable=False),
                     sa.Column('token_id', sa.Integer, sa.ForeignKey("access_tokens.id")),
                     sa.Column('ability_id', sa.Integer, sa.ForeignKey("abilities.id")),
 

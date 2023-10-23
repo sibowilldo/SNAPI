@@ -29,6 +29,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+    scopes: list[str] = []
 
 
 def verify_password(plain_password, hashed_password):

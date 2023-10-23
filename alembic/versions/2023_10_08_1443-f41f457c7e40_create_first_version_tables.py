@@ -78,7 +78,7 @@ def upgrade() -> None:
 
     op.create_table("applications",
                     sa.Column('id', sa.Integer, primary_key=True),
-                    sa.Column('user_id', sa.Integer, sa.ForeignKey("users.id")),
+                    sa.Column('status_id', sa.Integer, sa.ForeignKey("statuses.id")),
                     sa.Column('company_id', sa.Integer, sa.ForeignKey("companies.id")),
 
                     sa.Column('name', sa.String(150)),
@@ -92,6 +92,7 @@ def upgrade() -> None:
                     sa.Column('application_id', sa.Integer, sa.ForeignKey("applications.id")),
 
                     sa.Column('token', sa.String),
+                    sa.Column('expires_at', sa.DateTime, nullable=True),
                     sa.Column('last_used_at', sa.DateTime, nullable=True),
 
                     sa.Column('created_at', sa.DateTime, server_default=str(datetime.now())),
