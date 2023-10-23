@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="input-group mb-5">
     <h2 class="page-title">Company Details</h2>
     <form action="/add" method="post">
         {% csrf_token %}
 
-        <div class="mb-3">
+        <div class="form-control">
             <input type="text" id="name" name="name" placeholder="Company Name*" class="form-control" required>
         </div>
 
-        <div class="mb-3">
+        <div class="form-control">
             <input type="text" id="registration" name="registration_number" placeholder="Registration Number*" class="form-control" required>
         </div>
 
-        <div class="mb-3">
+        <div class="form-control">
             <input type="text" id="contact" name="main_contact_number" placeholder="Main Contact Number*" class="form-control" required>
         </div>
 
-        <div class="mb-3">
+        <div class="form-control">
             <input type="text" id="seccontact" name="secondary_contact_number" placeholder="Alt Contact Number" class="form-control">
         </div>
 
-        <button type="submit" class="btn btn-primary or-button">Create</button>
+        <button type="submit" class="btn btn-bg-warning">Create</button>
     </form>
 </div>
 

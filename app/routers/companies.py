@@ -21,7 +21,7 @@ async def home(request: Request, db: Session = Depends(get_db)):
 async def add(
     request: Request,
     name: str = Form(...),
-    registration_number: int = Form(...),
+    registration_number: str = Form(...),
     main_contact_number: int = Form(...),
     secondary_contact_number: int = Form(...),
     user_id: int = Form(...),
@@ -45,7 +45,7 @@ async def add(
         raise HTTPException(status_code=422, detail=str(e))
 
 @router.get("/createnew")
-async def createnew(request: Request, user_id: int = Cookie(None), db: Session = Depends(get_db)):
+async def createnew(request: Request, user_id: int = 1, db: Session = Depends(get_db)):
     if user_id is None:
         raise HTTPException(status_code=401, detail="User not authenticated")
     return templates.TemplateResponse("createnew.html", {"request": request, "user_id": user_id})
@@ -60,7 +60,7 @@ async def update(
     request: Request,
     company_id: int,
     name: str = Form(...),
-    registration_number: int = Form(...),
+    registration_number: str = Form(...),
     main_contact_number: int = Form(...),
     secondary_contact_number: int = Form(...),
     db: Session = Depends(get_db)
