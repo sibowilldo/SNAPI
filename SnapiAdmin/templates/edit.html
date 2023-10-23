@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/update/{{ user.id }}" method="post">
+
+  <div class="new">
+    <label for="name">Name of the company</label>
+    <input type="text" id="name" name="name" placeholder="Name of the company" class="form-control" value="{{ user.name }}">
+  </div>
+
+  <div class="new">
+    <label for="registration">Registration Number</label>
+    <input type="text" id="registration" name="registration" placeholder="Registration Number" class="form-control" value="{{ user.registration }}">
+  </div>
+
+  <div class="new">
+    <label for="contact">Contact Number</label>
+    <input type="text" id="contact" name="contact" placeholder="Contact Number" class="form-control" value="{{ user.contact }}">
+  </div>
+
+  <div class="new">
+    <label for="created">Created By</label>
+    <input type="datetime" id="created" name="created" placeholder="Created By" class="form-control" value="{{ user.created }}">
+  </div>
+
+  <div class="new">
+    <label for="updated">Updated By</label>
+    <input type="datetime" id="updated" name="updated" placeholder="Updated By" class="form-control" value="{{ user.updated }}">
+  </div>
+
+  <input type="submit" value="Submit" class="buttonny">
+
+</form>
+{% endblock content %}

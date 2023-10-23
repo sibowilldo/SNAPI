@@ -6,7 +6,6 @@
     <form action="/update/{{ company_id }}" method="post">
         {% csrf_token %}
         <input type="hidden" name="_method" value="PUT">
-
         <div class="form-control">
             <input type="text" id="name" name="name" placeholder="Company Name*" class="form-control" value="{{ user.name }}" required>
         </div>

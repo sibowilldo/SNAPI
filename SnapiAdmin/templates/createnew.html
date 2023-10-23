@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/add" method="post">
+
+  <div class="new">
+    <label>Name</label>
+    <input type="text" name="name" placeholder="Company name" class="form-control">
+  </div>
+
+  <div class="new">
+    <label>Registration Number</label>
+    <input type="text" name="registration" placeholder="Registration No" class="form-control">
+  </div>
+
+  <div class="new">
+    <label>Contact Number</label>
+    <input type="text" name="contact" placeholder="Contact Number" class="form-control">
+  </div>
+
+  <div class="new">
+    <label>Created By</label>
+    <input type="datetime" name="created" placeholder="Created By" class="form-control">
+  </div>
+
+  <div class="new">
+    <label>Updated By</label>
+    <input type="datetime" name="updated" placeholder="Updated By" class="form-control">
+  </div>
+
+  <input type="submit" value="Update" class="buttonny mb-3">
+
+</form>
+{% endblock content %}
+
