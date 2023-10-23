@@ -1,0 +1,131 @@
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <a href="createnew/" class="btn btn-primary">Create New</a>
+        <br><br>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Registration No</th>
+                    <th scope="col">Main Contact No</th>
+                    <th scope="col">Alt Contact No</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Updated At</th>
+                    <th scope="col" width="200">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                <tr>
+                    <td>{{ company.id }}</td>
+                    <td>{{ company.user_id }}</td>
+                    <td>{{ company.name }}</td>
+                    <td>{{ company.registration_number }}</td>
+                    <td>{{ company.main_contact_number }}</td>
+                    <td>{{ company.Alt_contact_number }}</td>
+                    <td class="created-by">Placeholder for Created By</td>
+                    <td class="updated-by">Placeholder for Updated By</td>
+                    <td>
+                        <a href="{{ url_for('edit_company', company_id=company.id) }}" class="btn btn-success">Edit</a>
+                        <button class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal{{ company.id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page - 1 }}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for p in range(1, total_pages + 1) %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page < total_pages %}
+                <li class="page-item">
+                    <a class a="page-link" href="?page={{ page + 1 }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% for company in companies %}
+<div class="modal fade" id="deleteModal{{ company.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ company.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ company.id }}">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="confirmation-message" style="display: none;">Are you sure you want to delete this record?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" style="display: none;">Cancel</button>
+                <a href="{{ url_for('delete', company_id=company.id) }}" class="btn btn-danger confirm-button" style="display: none;">Delete</a>
+                <button type="button" class="btn btn-danger delete-confirm-button">Confirm Deletion</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add a click event listener to the "Delete" buttons
+        $(".delete-button").click(function() {
+            // Show the confirmation message and buttons for the respective modal
+            var modalId = $(this).data("target");
+            $(modalId).find(".confirmation-message").show();
+            $(modalId).find(".cancel-button").show();
+            $(modalId).find(".confirm-button").show();
+            $(modalId).find(".delete-confirm-button").hide();
+        });
+
+
+        $(".delete-confirm-button").click(function() {
+            // Hide the confirmation message and buttons for the respective modal
+            var modalId = $(this).closest(".modal").attr("id");
+            $("#" + modalId).find(".confirmation-message").hide();
+            $("#" + modalId).find(".cancel-button").hide();
+            $("#" + modalId).find(".confirm-button").hide();
+            $("#" + modalId).find(".delete-confirm-button").show();
+        });
+    });
+</script>
+<script>
+    function generateCurrentDateTime() {
+        const currentDate = new Date().toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+        return currentDate;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const createdElements = document.querySelectorAll(".created-by");
+        const updatedElements = document.querySelectorAll(".updated-by");
+
+        const currentDateTime = generateCurrentDateTime();
+
+        createdElements.forEach(function (element) {
+            element.textContent = currentDateTime;
+        });
+
+        updatedElements.forEach(function (element) {
+            element.textContent = currentDateTime;
+        });
+    });
+</script>
+{% endblock content %}
