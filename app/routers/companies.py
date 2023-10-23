@@ -59,6 +59,7 @@ async def update(
     company_id: int,
     name: str = Form(...),
     registration_number: int = Form(...),
+
     main_contact_number: int = Form(...),
     secondary_contact_number: int = Form(...),
     db: Session = Depends(get_db)
@@ -84,3 +85,4 @@ async def delete(
     db.delete(company)
     db.commit()
     return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
+

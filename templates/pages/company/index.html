@@ -4,6 +4,7 @@
         <a href="createnew/" class="btn btn-primary">Create New</a>
         <br><br>
         <table class="table table-bordered table-striped">
+
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -31,6 +32,7 @@
                     <td>
                         <a href="{{ url_for('edit_company', company_id=company.id) }}" class="btn btn-success">Edit</a>
                         <button class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal{{ company.id }}">Delete</button>
+
                     </td>
                 </tr>
                 {% endfor %}
@@ -75,6 +77,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" style="display: none;">Cancel</button>
+
                 <a href="{{ url_for('delete', company_id=company.id) }}" class="btn btn-danger confirm-button" style="display: none;">Delete</a>
                 <button type="button" class="btn btn-danger delete-confirm-button">Confirm Deletion</button>
             </div>
