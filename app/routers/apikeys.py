@@ -5,6 +5,8 @@ from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from starlette import status
+from starlette.responses import RedirectResponse
 
 from app import repository as repo
 from app.database.database import get_db
@@ -53,13 +55,21 @@ async def store_apikey(request: Request,
     access_token = AccessTokenCreate(token=token, application_id=application.id, abilities=abilities,
                                      expires_at=datetime.utcnow() + timedelta(days=lifespan * 30))
 
+    access_tokens = get_user_access_tokens(db=db, user_id=1)
+
     repo.create_token(db=db, access_token=access_token)
 
     token_message = {"token": token,
-                     "message": "Make sure you copy this token now. You won't be able to see it again."}
+                     "message": """Please save this secret key somewhere safe and accessible. 
+                     For security reasons, you won't be able to view it again through your OpenAI account. 
+                     If you lose this secret key, you'll need to generate a new one."""}
 
-    return templates.TemplateResponse("pages/api-keys/index.html", {
-        "request": request,
-        "message": "Success",
-        "token": token_message
-    })
+    return RedirectResponse(url=router.url_path_for('apikeys.index'), status_code=status.HTTP_303_SEE_OTHER)
+
+    # return templates.TemplateResponse("pages/api-keys/index.html", {
+    #     "request": request,
+    #     "message": "Success",
+    #     "token": token_message,
+    #     "access_tokens": access_tokens,
+    #     "token_count": len(access_tokens)
+    # })
