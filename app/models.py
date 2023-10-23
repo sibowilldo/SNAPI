@@ -25,11 +25,11 @@ class Status(HasCommonAttrs, Base):
     name = Column(String)
     description = Column(String, nullable=True)
 
-    abilities = relationship("Ability", back_populates="status")
-    applications = relationship("Application", back_populates="status")
-    dataset_items = relationship("DatasetItem", back_populates="status")
-    datasets = relationship("Dataset", back_populates="status")
-    users = relationship("User", back_populates="status")
+    abilities = relationship("Ability", back_populates="status", cascade="all, delete-orphan")
+    applications = relationship("Application", back_populates="status", cascade="all, delete-orphan")
+    dataset_items = relationship("DatasetItem", back_populates="status", cascade="all, delete-orphan")
+    datasets = relationship("Dataset", back_populates="status", cascade="all, delete-orphan")
+    users = relationship("User", back_populates="status", cascade="all, delete-orphan")
 
 
 class User(HasCommonAttrs, Base):
@@ -42,8 +42,8 @@ class User(HasCommonAttrs, Base):
     hashed_password = Column(String, nullable=False)
     email_verified_at = Column(DateTime, nullable=True)
 
-    abilities = relationship("Ability", secondary=ability_user, back_populates="users")
-    companies = relationship("Company", back_populates="user")
+    abilities = relationship("Ability", secondary=ability_user, back_populates="users", cascade="all, delete")
+    companies = relationship("Company", back_populates="user", cascade="all, delete-orphan")
     status = relationship("Status", back_populates="users")
 
 
@@ -58,8 +58,8 @@ class Company(HasCommonAttrs, Base):
     secondary_contact_number = Column(String, nullable=True)
 
     user = relationship("User", back_populates="companies")
-    addresses = relationship("Address", back_populates="company")
-    applications = relationship("Application", back_populates="company")
+    addresses = relationship("Address", back_populates="company", cascade="all, delete-orphan")
+    applications = relationship("Application", back_populates="company", cascade="all, delete-orphan")
 
 
 class Address(HasCommonAttrs, Base):
@@ -85,8 +85,9 @@ class Ability(HasCommonAttrs, Base):
     status_id = Column(Integer, ForeignKey("statuses.id"))
 
     status = relationship("Status", back_populates="abilities")
-    users = relationship("User", secondary=ability_user, back_populates="abilities")
-    access_tokens = relationship("AccessToken", secondary=ability_token, back_populates="abilities")
+    users = relationship("User", secondary=ability_user, back_populates="abilities", cascade="all, delete")
+    access_tokens = relationship("AccessToken", secondary=ability_token, back_populates="abilities",
+                                 cascade="all, delete")
 
 
 class Application(HasCommonAttrs, Base):
@@ -99,7 +100,7 @@ class Application(HasCommonAttrs, Base):
 
     company = relationship("Company", back_populates="applications")
     status = relationship("Status", back_populates="applications")
-    access_tokens = relationship("AccessToken", back_populates="application")
+    access_tokens = relationship("AccessToken", back_populates="application", cascade="all, delete-orphan")
 
 
 class AccessToken(HasCommonAttrs, Base):
@@ -111,9 +112,9 @@ class AccessToken(HasCommonAttrs, Base):
     expires_at = Column(DateTime, nullable=True)
     last_used_at = Column(DateTime, nullable=True)
 
-    abilities = relationship("Ability", secondary=ability_token, back_populates="access_tokens")
+    abilities = relationship("Ability", secondary=ability_token, back_populates="access_tokens", cascade="all, delete")
     application = relationship("Application", back_populates="access_tokens")
-    dataset_items = relationship("DatasetItem", back_populates="access_token")
+    dataset_items = relationship("DatasetItem", back_populates="access_token", cascade="all, delete-orphan")
 
 
 class Dataset(HasCommonAttrs, Base):
@@ -124,7 +125,7 @@ class Dataset(HasCommonAttrs, Base):
     name = Column(String)
 
     status = relationship("Status", back_populates="datasets")
-    dataset_items = relationship("DatasetItem", back_populates="dataset")
+    dataset_items = relationship("DatasetItem", back_populates="dataset", cascade="all, delete-orphan")
 
 
 class DatasetItem(HasCommonAttrs, Base):
