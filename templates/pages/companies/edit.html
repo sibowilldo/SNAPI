@@ -53,8 +53,7 @@
                         <div class="d-flex flex-stack">
                             <!--begin::Wrapper-->
                             <div>
-                                <button type="submit" class="btn btn-primary"
-                                        data-kt-stepper-action="submit">
+                                <button type="button" class="btn btn-primary btn-update">
                                                 <span class="indicator-label">
                                                     Submit
                                                 </span>
@@ -77,9 +76,52 @@
 
 
 {% block scripts %}
-
     <script>
+        $(document).ready(() => {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "onHidden" : () => window.location.replace("{{ url_for('companies.index') }}")
+            };
 
+            $('.btn-update').on('click', e => {
+                e.preventDefault()
+                const company_name = $('input#company_name').val()
+                const company_registration = $('input[name=registration_number]').val()
+                const main_contact_number = $('input[name=main_contact_number]').val()
+                const secondary_contact_number = $('input[name=secondary_contact_number]').val()
+
+                let url = "{{ url_for('companies.update', company_id=':item_id:') }}"
+
+                window.axios.put(url.replace(':item_id:', '{{ company.id }}'), {
+                    'company_id': '{{ company.id }}',
+                    'name': company_name,
+                    'registration_number': company_registration,
+                    'main_contact_number': main_contact_number,
+                    'secondary_contact_number': secondary_contact_number === "None"? '':secondary_contact_number,
+                }).then(res => {
+                    console.log(res)
+                    toastr.success("Details updated successfully", "Success");
+                }).catch(err => {
+                    console.log(err)
+                    toastr.warning(err.message, err.code);
+                })
+
+            })
+        })
     </script>
 
 {% endblock %}

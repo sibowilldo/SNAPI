@@ -60,7 +60,7 @@ async def delete_company(
     return {"message": message, "response": delete_response}
 
 
-@router.put("/companies/update/{company_id}", name="companies.update")
+@router.put("/companies/{company_id}/update", name="companies.update")
 async def update_company(
         request: Request,
         company_id: int,

@@ -95,7 +95,6 @@ class Company(CompanyBase):
 
 class CompanyUpdate(CompanyBase):
     company_id: int
-    updated_at: datetime
 
     class Config:
         orm_mode = True

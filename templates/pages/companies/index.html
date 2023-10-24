@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
-        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-8 mb-md-5 mb-xl-10">
+        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-12 mb-md-5 mb-xl-10">
 
             <div class="card card-flush shadow-sm">
                 <div class="card-header">
@@ -20,18 +20,17 @@
                             Create New</a>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                <div class="card-body table-responsive">
+                    <table class="table table-striped table-row-dashed align-middle gs-0 gy-3 my-0">
                         <thead>
                         <tr>
                             <th scope="col" class="text-uppercase fw-bold">ID</th>
-                            <th scope="col" class="text-uppercase fw-bold">User ID</th>
-                            <th scope="col" class="text-uppercase fw-bold">Name</th>
-                            <th scope="col" class="text-uppercase fw-bold">Registration No</th>
-                            <th scope="col" class="text-uppercase fw-bold">Main Contact No</th>
-                            <th scope="col" class="text-uppercase fw-bold">Alt Contact No</th>
-                            <th scope="col" class="text-uppercase fw-bold">Created</th>
-                            <th scope="col" class="text-uppercase fw-bold">Last Updated</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Name</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Registration No</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Main Contact No</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Alt Contact No</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Created</th>
+                            <th scope="col" class="text-uppercase fw-bold min-w-sm-200px">Last Updated</th>
                             <th scope="col" class="text-uppercase fw-bold"></th>
                         </tr>
                         </thead>
@@ -39,7 +38,6 @@
                         {% for company in companies %}
                             <tr>
                                 <td>{{ company.id }}</td>
-                                <td>{{ company.user_id }}</td>
                                 <td>{{ company.name }}</td>
                                 <td>{{ company.registration_number }}</td>
                                 <td>{{ company.main_contact_number }}</td>
