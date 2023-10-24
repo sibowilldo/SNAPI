@@ -53,5 +53,7 @@ async def store_company(
 
 @router.get("/{company_id}/edit", name="companies.edit")
 async def edit_company(request: Request, company_id: int, db: Session = Depends(get_db)):
-    company = db.query(Company).filter(Company.id == company_id).first()
-    return templates.TemplateResponse("pages/companies/edit.html", {"request": request, "company": company})
+    company = repository.get_company_by_id(db=db, company_id=company_id)
+    return templates.TemplateResponse("pages/companies/edit.html",
+                                      {"request": request, "company": company, "countries": countries,
+                                       "provinces": provinces})

@@ -60,16 +60,14 @@ async def delete_company(
     return {"message": message, "response": delete_response}
 
 
-@router.put("/update/{company_id}", name="companies.update")
+@router.put("/companies/update/{company_id}", name="companies.update")
 async def update_company(
         request: Request,
         company_id: int,
         company: CompanyUpdate,
-        address: AddressUpdate,
         db: Session = Depends(get_db),
         response: Response = 200
 ):
-    company = repo.update_company(db=db,company_id=company_id, company=company)
-    address = repo.update_address(db=db, address=address)
+    company = repo.update_company(db=db, company_id=company_id, company=company)
     response.status_code = status.HTTP_202_ACCEPTED
-    return {"message": f'{company.name} updated, successfully.', "company": company, "address": address}
+    return {"message": f'{company.name} updated, successfully.', "company": company}

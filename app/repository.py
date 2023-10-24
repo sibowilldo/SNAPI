@@ -101,6 +101,10 @@ def get_companies(db: Session, user_id: int, skip: int = 0, limit: int = -1):
     return db.scalars(select(models.Company).filter(models.Company.user_id == user_id).offset(skip).limit(limit))
 
 
+def get_company_by_id(db: Session, company_id: int):
+    return db.scalar(select(models.Company).filter(models.Company.user_id == company_id))
+
+
 def get_user_access_tokens(db: Session, user_id: int):
     company_ids = db.scalars(select(models.Company.id).filter(models.Company.user_id == user_id)).all()
     application_ids = db.scalars(
@@ -161,8 +165,8 @@ def update_application(db: Session, application: schema.ApplicationUpdate):
     return db_application
 
 
-def update_company(db: Session, company: schema.CompanyUpdate):
-    db_company: Company = db.query(models.Company).filter(models.Company.id == company.company_id).first()
+def update_company(db: Session, company_id: int, company: schema.CompanyUpdate):
+    db_company: Company = db.query(models.Company).filter(models.Company.id == company_id).first()
 
     db_company.name = company.name
     db_company.registration_number = company.registration_number
