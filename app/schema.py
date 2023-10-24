@@ -57,7 +57,7 @@ class CompanyBase(BaseModel):
 
 
 class CompanyCreate(CompanyBase):
-    user_id: int
+    pass
 
 
 class ApplicationBase(BaseModel):
@@ -93,8 +93,15 @@ class Company(CompanyBase):
         orm_mode = True
 
 
-class Address(BaseModel):
-    id: int
+class CompanyUpdate(CompanyBase):
+    company_id: int
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class AddressBase(BaseModel):
     street_name: str
     street_number: str
     suburb: str
@@ -102,7 +109,19 @@ class Address(BaseModel):
     province_state: str
     postal_zip_code: str
     country: str
-    status: Status
+
+
+class Address(AddressBase):
+    id: int
+    company: Company
+
+
+class AddressCreate(AddressBase):
+    pass
+
+
+class AddressUpdate(AddressBase):
+    company_id: int
 
 
 class AccessTokenBase(BaseModel):

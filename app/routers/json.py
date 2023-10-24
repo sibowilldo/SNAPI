@@ -4,7 +4,7 @@ from starlette import status
 
 from app import repository as repo, schema
 from app.database.database import get_db
-from app.schema import ApplicationUpdate
+from app.schema import ApplicationUpdate, CompanyUpdate, AddressUpdate
 
 router = APIRouter(prefix="/json", tags=["Non-API JSON Responses"], include_in_schema=True)
 
@@ -43,3 +43,33 @@ async def update_application(
     application = repo.update_application(db=db, application=application)
     response.status_code = status.HTTP_202_ACCEPTED
     return {"message": f'{application.name} updated, successfully.', "application": application}
+
+
+@router.delete("/delete/{company_id}", name="companies.delete")
+async def delete_company(
+        request: Request,
+        company_id: int,
+        db: Session = Depends(get_db), response: Response = 200
+):
+    message = "Company has been deleted"
+    delete_response = repo.delete_company(db=db, company_id=company_id)
+    if response == 0:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        raise HTTPException(detail='Failed to delete Company.', status_code=status.HTTP_400_BAD_REQUEST)
+    response.status_code = status.HTTP_200_OK
+    return {"message": message, "response": delete_response}
+
+
+@router.put("/update/{company_id}", name="companies.update")
+async def update_company(
+        request: Request,
+        company_id: int,
+        company: CompanyUpdate,
+        address: AddressUpdate,
+        db: Session = Depends(get_db),
+        response: Response = 200
+):
+    company = repo.update_company(db=db,company_id=company_id, company=company)
+    address = repo.update_address(db=db, address=address)
+    response.status_code = status.HTTP_202_ACCEPTED
+    return {"message": f'{company.name} updated, successfully.', "company": company, "address": address}

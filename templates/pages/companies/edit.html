@@ -1,11 +1,12 @@
-{% extends 'base.html' %}
-
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Edit {{ company.name }} Details
+{% endblock %}
 {% block content %}
 <div class="container">
 
     <h2 class="page-title">Edit Company Information</h2>
     <form action="/update/{{ company_id }}" method="post">
-        {% csrf_token %}
         <input type="hidden" name="_method" value="PUT">
 
         <div class="mb-3">

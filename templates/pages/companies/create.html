@@ -1,0 +1,312 @@
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Create Company
+{% endblock %}
+{% block content %}
+    <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
+        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-6 mb-md-5 mb-xl-10">
+
+            <div class="card card-flush shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title">Create new Company</h3>
+                </div>
+                <div class="card-body py-5">
+                    <!--begin::Stepper-->
+                    <div class="stepper stepper-pills stepper-column d-flex flex-column flex-lg-row"
+                         id="create_company_stepper">
+                        <!--begin::Aside-->
+                        <div class="d-flex flex-row-auto w-100 w-lg-300px">
+                            <!--begin::Nav-->
+                            <div class="stepper-nav flex-cente">
+                                <!--begin::Step 1-->
+                                <div class="stepper-item me-5 current" data-kt-stepper-element="nav">
+                                    <!--begin::Wrapper-->
+                                    <div class="stepper-wrapper d-flex align-items-center">
+                                        <!--begin::Icon-->
+                                        <div class="stepper-icon w-40px h-40px">
+                                            <i class="stepper-check fas fa-check"></i>
+                                            <span class="stepper-number">1</span>
+                                        </div>
+                                        <!--end::Icon-->
+
+                                        <!--begin::Label-->
+                                        <div class="stepper-label">
+                                            <h3 class="stepper-title">
+                                                Step 1
+                                            </h3>
+
+                                            <div class="stepper-desc">
+                                                Company Details
+                                            </div>
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Wrapper-->
+
+                                    <!--begin::Line-->
+                                    <div class="stepper-line h-40px"></div>
+                                    <!--end::Line-->
+                                </div>
+                                <!--end::Step 1-->
+
+
+                                <!--begin::Step 4-->
+                                <div class="stepper-item me-5" data-kt-stepper-element="nav">
+                                    <!--begin::Wrapper-->
+                                    <div class="stepper-wrapper d-flex align-items-center">
+                                        <!--begin::Icon-->
+                                        <div class="stepper-icon w-40px h-40px">
+                                            <i class="stepper-check fas fa-check"></i>
+                                            <span class="stepper-number">2</span>
+                                        </div>
+                                        <!--begin::Icon-->
+
+                                        <!--begin::Label-->
+                                        <div class="stepper-label">
+                                            <h3 class="stepper-title">
+                                                Step 2
+                                            </h3>
+
+                                            <div class="stepper-desc">
+                                                Address Details
+                                            </div>
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Wrapper-->
+                                </div>
+                                <!--end::Step 4-->
+                            </div>
+                            <!--end::Nav-->
+                        </div>
+
+                        <!--begin::Content-->
+                        <div class="flex-row-fluid">
+                            <!--begin::Form-->
+                            <form action="{{ url_for('applications.store') }}" method="post"
+                                  class="form w-lg-500px mx-auto" novalidate="novalidate">
+                                <!--begin::Group-->
+                                <div class="mb-5">
+                                    <div class="flex-column current" data-kt-stepper-element="content">
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="company_name">Company Name</label>
+                                            <input type="text" class="form-control" name="name" id="company_name"
+                                                   placeholder="" value="Snapi Co"/>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="registration_number">Company
+                                                Registration #
+                                            </label>
+                                            <input type="text" class="form-control" name="registration_number"
+                                                   id="registration_number"
+                                                   placeholder="" value="089709-KJG"/>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="main_contact_number">Contact
+                                                Number</label>
+                                            <input type="tel" class="form-control" name="main_contact_number"
+                                                   id="main_contact_number"
+                                                   placeholder="" value=""/>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label class="form-label" for="secondary_contact_number">Contact Number
+                                                (Alternative)</label>
+                                            <input type="tel" class="form-control" name="secondary_contact_number"
+                                                   id="secondary_contact_number"
+                                                   placeholder="" value=""/>
+                                        </div>
+                                    </div>
+                                    <!--begin::Step 1-->
+                                    <div class="flex-column" data-kt-stepper-element="content">
+
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="street_name">Street Name</label>
+                                            <input type="text" class="form-control" name="street_name" id="street_name"
+                                                   placeholder="" value=""/>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="street_number">Street Number</label>
+                                            <input type="text" class="form-control" name="street_number"
+                                                   id="street_number"
+                                                   placeholder="" value=""/>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label class="required form-label" for="suburb">Suburb</label>
+                                            <input type="text" class="form-control" name="suburb" id="suburb"
+                                                   placeholder="" value=""/>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="fv-row mb-10">
+                                                <label class="required form-label" for="city">City</label>
+                                                <input type="text" class="form-control" name="city" id="city"
+                                                       placeholder="" value=""/>
+                                            </div>
+
+                                            <div class="fv-row mb-10">
+                                                <label class="required form-label" for="postal_zip_code">Postal
+                                                    Code</label>
+                                                <input type="text" class="form-control" name="postal_zip_code"
+                                                       id="postal_zip_code"
+                                                       placeholder="" value=""/>
+                                            </div>
+                                        </div>
+
+                                        <div class="fv-row mb-10">
+                                            <label for="province_state" class="required form-label">Province</label>
+                                            <select required name="province_state" id="province_state"
+                                                    class="form-select"
+                                                    aria-label="Select Province" data-control="select2">
+                                                <option value="" selected>Select Province</option>
+                                                {% for province_state in provinces %}
+                                                    <option value="{{ province_state }}">{{ province_state }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="fv-row mb-10">
+                                            <label for="country" class="required form-label">Country</label>
+                                            <select required name="country" id="country" class="form-select"
+                                                    aria-label="Select country" data-control="select2">
+                                                <option value="" selected>Select Country</option>
+                                                {% for country in countries %}
+                                                    <option value="{{ country }}">{{ country }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--begin::Step 1-->
+                                </div>
+                                <!--end::Group-->
+
+                                <!--begin::Actions-->
+                                <div class="d-flex flex-stack">
+                                    <!--begin::Wrapper-->
+                                    <div class="me-2">
+                                        <button type="button" class="btn btn-light btn-active-light-primary"
+                                                data-kt-stepper-action="previous">
+                                            Back
+                                        </button>
+                                    </div>
+                                    <!--end::Wrapper-->
+
+                                    <!--begin::Wrapper-->
+                                    <div>
+                                        <button type="button" class="btn btn-primary"
+                                                data-kt-stepper-action="submit">
+                                                <span class="indicator-label">
+                                                    Submit
+                                                </span>
+                                            <span class="indicator-progress">
+                                                Please wait... <span
+                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary" data-kt-stepper-action="next">
+                                            Continue
+                                        </button>
+                                    </div>
+                                    <!--end::Wrapper-->
+                                </div>
+                                <!--end::Actions-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                    </div>
+                    <!--end::Stepper-->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block scripts %}
+
+    <script>
+        $(document).ready(() => {
+            handleStepperInit();
+            handleStepperFormSubmit()
+        })
+
+        function handleStepperFormSubmit(){
+            const btnSubmit = $('button[data-kt-stepper-action=submit]')
+
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "onHidden": function (){
+                    window.location.replace('{{ url_for("companies.index") }}')
+                }
+            };
+
+            btnSubmit.on('click', e => {
+                e.preventDefault()
+                const name = $('input#company_name').val()
+                const registration_number = $('input[name=registration_number]').val();
+                const main_contact_number = $('input[name=main_contact_number]').val()
+                const secondary_contact_number = $('input[name=secondary_contact_number]').val()
+                const street_name = $('input[name=street_name]').val()
+                const street_number = $('input[name=street_number]').val()
+                const suburb = $('input[name=suburb]').val()
+                const city = $('input[name=city]').val()
+                const postal_zip_code = $('input[name=postal_zip_code]').val()
+                const province_state = $('select[name=province_state]').select2('data');
+                const country = $('select[name=country]').select2('data');
+
+
+                let url = "{{ url_for('companies.store') }}"
+
+                window.axios.post(url, {
+                    "company" : {
+                        "name": name,
+                        "registration_number": registration_number,
+                        "main_contact_number": main_contact_number,
+                        "secondary_contact_number": secondary_contact_number
+                    },
+                    "address": {
+                        "street_name": street_name,
+                        "street_number": street_number,
+                        "suburb": suburb,
+                        "city": city,
+                        "postal_zip_code": postal_zip_code,
+                        "province_state": province_state[0].id,
+                        "country": country[0].id
+                    }
+                }).then(res => {
+                    toastr.success("Details Added successfully. Redirecting...", "Success");
+                }).catch(err => {
+                    console.log(err)
+                    toastr.warning(err.message, err.code);
+                })
+
+            })
+        }
+
+        function handleStepperInit() {
+            var element = document.querySelector("#create_company_stepper");
+            var stepper = new KTStepper(element);
+            stepper.on("kt.stepper.next", function (stepper) {
+                stepper.goNext(); // go next step
+            });
+            stepper.on("kt.stepper.previous", function (stepper) {
+                stepper.goPrevious(); // go previous step
+            });
+        }
+    </script>
+
+{% endblock %}
+   
