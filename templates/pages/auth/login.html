@@ -1,7 +1,6 @@
 {% extends "layout/_auth.html" %}
 {% block content %}
-    <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form"
-          data-kt-redirect-url="../../demo1/dist/index.html" action="#">
+    <form class="form w-100" novalidate="novalidate" method="post">
         <!--begin::Heading-->
         <div class="text-center mb-11">
             <!--begin::Title-->
@@ -63,4 +62,4 @@
                class="link-primary">Sign up</a></div>
         <!--end::Sign up-->
     </form>
-{% end-block %}
+{% endblock %}

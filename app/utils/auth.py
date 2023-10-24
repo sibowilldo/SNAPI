@@ -6,11 +6,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
-from app.schema import UserBase, User
+from app.schema import UserBase
 from .dependencies import get_api_version
-from .fake_db import fake_users_db
+from ..models import User
 from ..config import config_app
+from ..database.database import get_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -41,7 +43,7 @@ def get_hashed_password(password):
 
 
 def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
+    user = get_user_by_email(db=db, email=username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -60,13 +62,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return User(**user_dict)
-
-
-async def get_logged_in_user(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_logged_in_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Failed to validate credentials",
@@ -80,13 +76,15 @@ async def get_logged_in_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user_by_email(db=db, email=token_data.username)
     if user is None:
         raise credentials_exception
     return user
 
 
 async def get_active_logged_in_user(current_user: Annotated[UserBase, Depends(get_logged_in_user)]):
-    if not current_user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()

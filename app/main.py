@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from jinja2 import environment
 
 from .config import config_app
-from .routers.api import router as api_router
+from .routers.api.api import router as api_router
 from .routers.apikeys import router as apikeys_router
 from .routers.applications import router as applications_router
 from .routers.auth import router as auth_router
