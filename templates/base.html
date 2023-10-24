@@ -5,7 +5,7 @@
     {% block head %}
         <base href=""/>
         <title>
-            {% block title %} {% endblock %} - SNAPI
+            {% block title %} {% end-block %} - SNAPI
         </title>
         <meta charset="utf-8"/>
         <meta
@@ -45,14 +45,14 @@
                 rel="stylesheet"
                 type="text/css"
         />
-        {% block styles %}{% endblock %}
+        {% block styles %}{% end block %}
         <script>
             if (window.top !== window.self) {
                 window.top.location.replace(window.self.location.href);
             }
         </script>
 
-    {% endblock %}
+    {% end-block %}
 </head>
 <body
         id="kt_app_body"
@@ -65,9 +65,9 @@
         data-kt-app-sidebar-push-toolbar="true"
         data-kt-app-sidebar-push-footer="true"
         data-kt-app-footer-fixed="true"
-        class="app-default {% block body_css %}{% endblock %}"
+        class="app-default {% block body_css %}{% end-block %}"
 >
-{% block body %}{% endblock %}
+{% block body %}{% end-block %}
 <script>
     var hostUrl = "assets/";
 </script>
@@ -82,6 +82,6 @@
 <script src="{{ url_for('static', path='assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script>
 <script src="{{ url_for('static', path='assets/js/custom/utilities/modals/users-search.js') }}"></script>
 
-{% block scripts %}{% endblock %}
+{% block scripts %}{% end block %}
 </body>
 </html>

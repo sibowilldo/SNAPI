@@ -1,37 +1,68 @@
-from datetime import timedelta
-from typing import Annotated
+from fastapi import APIRouter, Request, Form
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from app.routers.home import app
 
-from ..schema import UserBase
-from ..utils.auth import Token, authenticate_user, create_access_token, get_active_logged_in_user
-from ..utils.dependencies import get_api_version
-from ..utils.fake_db import fake_users_db
+router = APIRouter(prefix="", tags=["Auth"])
 
-router = APIRouter(prefix=get_api_version(), tags=["Auth"])
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+templates = Jinja2Templates(directory="templates")
 
 
-@router.post("/token", response_model=Token)
-async def login_for_access_token(
-        form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": f"{user.username}"}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+@router.get("/login", response_class=HTMLResponse)
+async def display_login_page(request: Request):
+    return templates.TemplateResponse("pages/auth/login.html", {"request": request})
 
 
-@router.get("/auth/user", response_model=UserBase)
-async def read_auth_user(logged_in_user: Annotated[str, Depends(get_active_logged_in_user)]):
-    return logged_in_user
+@app.get("/login")
+def home(request: Request):
+    return templates.TemplateResponse("pages/auth/login.html", {"request": request})
+
+
+@app.get("/register")
+def signup(request: Request):
+    return templates.TemplateResponse("pages/auth/register.html", {"request": request})
+
+
+@app.get("/reset/password")
+def reset_password(request: Request):
+    return templates.TemplateResponse("pages/auth/reset_password.html", {"request": request})
+
+
+# In-memory database for storing reset tokens (use a real database in production)
+reset_tokens = {}
+
+
+@app.get("/reset-email")
+async def reset_email(request: Request):
+    return templates.TemplateResponse("email_template.html", {"request": request, "reset_link": "your_reset_link_here"})
+
+
+@app.post("/reset-password")
+async def reset_password(request: Request, password: str = Form(...), token: str = Form(...)):
+    if token in reset_tokens and reset_tokens[token] == "user_id":
+        # Reset the user's password here (e.g., update it in a database)
+        return {"message": "Password reset successfully"}
+    return {"message": "Invalid or expired token"}
+
+
+class EmailForm(BaseModel):
+    email: str
+
+
+@app.post("/validate-email/", response_class=HTMLResponse)
+async def validate_email(request: Request, form: EmailForm):
+    email = form.email
+    is_valid = validate_email_format(email)  # Your email validation function
+
+    return templates.TemplateResponse("pages/auth/emailvalidation.html", {"request": request, "is_valid": is_valid, "email": email})
+
+
+def validate_email_format(email):
+    # Implement your email validation logic here
+    # You can use regular expressions or any other method
+    # For a simple example, we check for "@" in the email
+    if "@" in email:
+        return True
+    return False
