@@ -1,0 +1,43 @@
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Create New Application
+{% endblock %}
+{% block content %}
+
+    <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
+        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-6 mb-md-5 mb-xl-10">
+
+            <form action="{{ url_for('applications.store') }}" method="post">
+                <div class="card card-flush shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title">Create New Application</h3>
+                        <div class="card-toolbar">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Save Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body py-5">
+                        <div class="mb-10">
+                            <label for="application_name" class="required form-label">App Name</label>
+                            <input type="text" id="application_name" name="application_name"
+                                   class="form-control" placeholder="My Awesome App"/>
+                        </div>
+                        <div class="mb-10">
+                            <label for="company_id" class="required form-label">Company</label>
+                            <select required name="company_id" id="company" class="form-select"
+                                    aria-label="Select Company" data-control="select2">
+                                <option value="" selected>Select Company</option>
+                                {% for company in companies %}
+                                    <option value="{{ company.id }}">{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+{% endblock content %}

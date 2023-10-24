@@ -1,0 +1,169 @@
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Companies
+{% endblock %}
+{% block content %}
+
+    <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
+        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-8 mb-md-5 mb-xl-10">
+
+            <div class="card card-flush shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title">Companies</h3>
+                    <div class="card-toolbar">
+                        <a href="{{ url_for('companies.create') }}" class="btn btn-light-primary btn-sm">
+                            <i class="ki-duotone ki-plus-square fs-2 text-active-primary">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                            </i>
+                            Create New</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="text-uppercase fw-bold">ID</th>
+                            <th scope="col" class="text-uppercase fw-bold">User ID</th>
+                            <th scope="col" class="text-uppercase fw-bold">Name</th>
+                            <th scope="col" class="text-uppercase fw-bold">Registration No</th>
+                            <th scope="col" class="text-uppercase fw-bold">Main Contact No</th>
+                            <th scope="col" class="text-uppercase fw-bold">Alt Contact No</th>
+                            <th scope="col" class="text-uppercase fw-bold">Created</th>
+                            <th scope="col" class="text-uppercase fw-bold">Last Updated</th>
+                            <th scope="col" class="text-uppercase fw-bold"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for company in companies %}
+                            <tr>
+                                <td>{{ company.id }}</td>
+                                <td>{{ company.user_id }}</td>
+                                <td>{{ company.name }}</td>
+                                <td>{{ company.registration_number }}</td>
+                                <td>{{ company.main_contact_number }}</td>
+                                <td>{{ company.Alt_contact_number }}</td>
+                                <td>{{ company.created_at }}</td>
+                                <td>{{ company.updated_at }}</td>
+                                <td>
+                                    <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end"
+                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                            data-kt-menu-overflow="true">
+                                        <i class="ki-duotone ki-dots-square fs-1 text-gray-400 me-n1"><span
+                                                class="path1"></span><span class="path2"></span><span
+                                                class="path3"></span><span class="path4"></span></i>
+                                    </button>
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px"
+                                         data-kt-menu="true" style="">
+
+                                        <div class="menu-item px-3">
+                                            <div class="menu-content fs-6 text-dark fw-bold px-3 py-4">Quick Actions
+                                            </div>
+                                        </div>
+
+
+                                        <!--begin::Menu separator-->
+                                        <div class="separator mb-3 opacity-75"></div>
+                                        <!--end::Menu separator-->
+
+
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url_for('companies.edit', company_id=company.id) }}"
+                                               class="menu-link px-3 d-flex gap-5">
+                                                <i class="ki-duotone ki-pencil text-dark fs-2">
+                                                    <span class="path1"></span>
+                                                    <span class="path2"></span>
+                                                </i><span>Edit Details</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="menu-item px-3">
+                                            <a href="{{ url_for('applications.create') }}"
+                                               class="menu-link px-3 d-flex gap-5">
+                                                <i class="ki-duotone ki-key-square text-dark fs-2">
+                                                    <span class="path1"></span>
+                                                    <span class="path2"></span>
+                                                </i>
+                                                <span>Create Application</span>
+                                            </a>
+                                        </div>
+
+                                        <!--begin::Menu separator-->
+                                        <div class="separator mt-3 opacity-75"></div>
+                                        <!--end::Menu separator-->
+
+
+                                        <div class="menu-item px-3">
+                                            <div class="menu-content px-3 py-3">
+                                                <button class="btn btn-light-danger w-100 btn-sm px-4 delete-company"
+                                                        data-id="{{ company.id }}">
+                                                    Delete Company
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            handleDeleteCompany();
+        });
+
+
+        function handleDeleteCompany() {
+            let deleteCompanyBtn = $('.delete-company')
+
+            deleteCompanyBtn.on('click', function (e) {
+                let itemId = $(this).data('id')
+                let url = "{{ url_for('companies.delete', company_id=':item_id:') }}"
+                Swal.fire({
+                    title: 'Confirm Action',
+                    text: "Are you sure, you want to delete this Company? Deleting the company will subsequently delete all applications and acsess tokens associated with it",
+                    icon: "info",
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, I'm sure!",
+                    customClass: {
+                        confirmButton: "btn btn-light-primary",
+                        cancelButton: "btn btn-danger"
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.axios
+                            .delete(url.replace(':item_id:', itemId))
+                            .then((response) => {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Company has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    window.location.replace("{{ url_for('companies.index') }}")
+                                })
+                            })
+                            .catch(error => {
+                                Swal.fire(
+                                    'Failed to Delete!',
+                                    'Company could not be deleted.',
+                                    'error'
+                                )
+                            })
+                    }
+                })
+            })
+        }
+    </script>
+{% endblock %}

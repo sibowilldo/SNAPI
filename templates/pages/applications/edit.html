@@ -1,0 +1,99 @@
+{% extends "layout/partials/_content.html" %}
+{% block title %}
+    Edit {{ application.name }}
+{% endblock %}
+{% block content %}
+
+    <div class="row justify-content-center g-5 gx-xl-10 mb-5 mb-xl-10">
+        <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-6 mb-md-5 mb-xl-10">
+
+            <form action="{{ url_for('applications.update', application_id=application.id) }}" method="post">
+                <div class="card card-flush shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title"> Edit {{ application.name }}</h3>
+                        <div class="card-toolbar">
+                            <button type="button" class="btn btn-sm btn-info btn-update">
+                                Update Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body py-5">
+                        <div class="mb-10">
+                            <label for="application_name" class="required form-label">App Name</label>
+                            <input type="text" id="application_name" name="application_name"
+                                   class="form-control" placeholder="My Awesome App" value="{{ application.name }}"/>
+                        </div>
+                        <div class="mb-10">
+                            <label for="company_id" class="required form-label">Company</label>
+                            <select required name="company_id" id="company" class="form-select"
+                                    aria-label="Select Company" data-control="select2">
+                                <option value="" selected>Select Company</option>
+                                {% for company in companies %}
+                                    <option value="{{ company.id }}" {{ 'selected' if application.company_id == company.id else '' }}>{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-10">
+                            <label for="status_id" class="required form-label">Status</label>
+                            <select required name="status_id" id="status" class="form-select"
+                                    aria-label="Select Status" data-control="select2">
+                                <option value="" selected>Select Status</option>
+                                {% for status in statuses %}
+                                    <option value="{{ status.id }}" {{ 'selected' if application.status_id == status.id else '' }}>{{ status.name|capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(() => {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toastr-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            $('.btn-update').on('click', e => {
+                e.preventDefault()
+                const application_name = $('input[name=application_name]').val()
+                const status_id = $('select[name=status_id]').select2('data');
+                const company_id = $('select[name=company_id]').select2('data');
+                let url = "{{ url_for('applications.update', application_id=':item_id:') }}"
+
+                window.axios.patch(url.replace(':item_id:', '{{ application.id }}'), {
+                    'application_id': '{{ application.id }}',
+                    'name': application_name,
+                    'company_id': company_id[0].id,
+                    'status_id': status_id[0].id,
+                }).then(res => {
+                    console.log(res)
+                    toastr.success("Details updated successfully", "Success");
+                }).catch(err => {
+                    console.log(err)
+                    toastr.warning(err.message, err.code);
+                })
+
+            })
+        })
+    </script>
+{% endblock %}

@@ -41,7 +41,6 @@ async def create(request: Request, db: Session = Depends(get_db)):
 
 @router.post("/create", response_class=HTMLResponse, name="apikeys.store", include_in_schema=False)
 async def store_apikey(request: Request,
-                       company_id: Annotated[int, Form()],
                        application_id: Annotated[int, Form()],
                        abilities: Annotated[List[int], Form()],
                        lifespan: Annotated[int, Form()],
@@ -53,13 +52,19 @@ async def store_apikey(request: Request,
     access_token = AccessTokenCreate(token=token, application_id=application.id, abilities=abilities,
                                      expires_at=datetime.utcnow() + timedelta(days=lifespan * 30))
 
+    access_tokens = get_user_access_tokens(db=db, user_id=1)
+
     repo.create_token(db=db, access_token=access_token)
 
     token_message = {"token": token,
-                     "message": "Make sure you copy this token now. You won't be able to see it again."}
+                     "message": """Please save this secret key somewhere safe and accessible. 
+                     For security reasons, you won't be able to view it again through your account. 
+                     If you lose this secret key, you'll need to create a new one."""}
 
     return templates.TemplateResponse("pages/api-keys/index.html", {
         "request": request,
         "message": "Success",
-        "token": token_message
+        "token": token_message,
+        "access_tokens": access_tokens,
+        "token_count": len(access_tokens)
     })
